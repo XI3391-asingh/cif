@@ -4,13 +4,7 @@ on:
   push:
     branches: [ "main", "actions" ]
   pull_request:
-    branches: [ "main", "actions" ]
-
-
-defaults:
-  run:
-    working-directory: services/$Project_Name
-    
+    branches: [ "main", "actions" ]    
 
 permissions:
   contents: read
@@ -19,9 +13,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/$Project_Name
 
-    env:
-      Project_Name: cif-service
+    # env:
+    #   Project_Name: cif-service
 
     steps:
     - uses: actions/checkout@v3
