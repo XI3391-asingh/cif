@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ "main", "actions" ]
 
+
+defaults:
+  run:
+    working-directory: services/cif-service
+
 permissions:
   contents: read
 
@@ -13,6 +18,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+
 
     steps:
     - uses: actions/checkout@v3
@@ -25,11 +31,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
 
     - name: Grant execute permission for gradlew
-      working-directory: services/$Project_Name
+      # working-directory: services/cif-service
       run: chmod +x gradlew
     
     - name: Gradle build
-      working-directory: services/$Project_Name
+      # working-directory: services/cif-service
       run: ./gradlew build
-      env:
-          Project_Name: cif-service
