@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ../../services/cif-service
+        working-directory: services/cif-service
 
     steps:
     - uses: actions/checkout@v3
