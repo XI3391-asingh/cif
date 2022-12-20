@@ -28,10 +28,8 @@ jobs:
       run: chmod +x gradlew
     
     - name: Execute Gradle build
-      run: |
-        cd services
-        cd /$Project_Name/
-       ./gradlew build
+      working-directory: services
+      run: ./gradlew build
       env:
         Project_Name: cif-service
     # steps:
