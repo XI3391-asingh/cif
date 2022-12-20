@@ -28,7 +28,7 @@ jobs:
       run: chmod +x gradlew
     
     defaults:
-      run:
+    - run:
         working-directory: services/cif-service
     
     - name: Gradle build
