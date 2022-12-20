@@ -1,0 +1,24 @@
+fileignoreconfig:
+- filename: services/onboarding-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/onboarding-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: services/customer-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/customer-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: templates/ms-template/{{cookiecutter.service_slug}}/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: templates/ms-template/{{cookiecutter.service_slug}}/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/sample-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/sample-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: services/onboarding-service/src/component-test/java/com/finx/stories/onboardingservice/AbstractStoryTest.java
+  allowed_patterns:
+  - ConfigOverride.config\(\"database.password\",\ POSTGRES_CONTAINER\:\:getPassword\)

@@ -1,0 +1,17 @@
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 11699
+  adminConnectors:
+    - type: http
+      port: 11700
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/customerservicedb}
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}

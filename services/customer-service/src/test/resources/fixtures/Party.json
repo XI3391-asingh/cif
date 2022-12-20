@@ -1,0 +1,60 @@
+{
+  "party": {
+    "partyId": 1,
+    "partyType": "Customer",
+    "fullName": "Mukesh Kumar",
+    "firstName": "Mukesh",
+    "middleName": "",
+    "lastName": "Kumar",
+    "gender": "FEMALE",
+    "dateOfBirth": "30-09-1985",
+    "primaryMobileNumber": "9988568709",
+    "primaryEmail": "joibristo434@gmail.com",
+    "maritalStatus": "married",
+    "nationalId": "13",
+    "nationalIdType": "11",
+    "nationalIdTypeCode": "12",
+    "nationalityCode": "01",
+    "status": "Active",
+    "countryOfResidenceCode": "01",
+    "jobPositionTypeCode": "Manager",
+    "amlRisk": "high",
+    "amlRiskEvalDate": "22-09-2002"
+  },
+  "occupationDetail": {
+    "occupationTypeCode": "123"
+  },
+  "partyFlag": {
+    "isAmlStatus": true,
+    "isPep": true,
+    "isFatcaApplicable":true
+  },
+  "address": [
+    {
+      "addressTypeCode": "01",
+      "isDefault": true,
+      "addressLine1": "test",
+      "addressLine2": "Ward 3, District 17",
+      "addressLine3": "HCMC",
+      "wardCode": "01",
+      "districtCode": "01",
+      "cityCode": "01",
+      "zipCode": 246174,
+      "countryCode": "01"
+    },
+    {
+      "addressTypeCode": "02",
+      "isDefault": false,
+      "addressLine1": "93 Nguyen Thai Hoc Street",
+      "addressLine2": "Cau Ong Lanh Ward",
+      "addressLine3": "District 1",
+      "wardCode": "02",
+      "districtCode": "02",
+      "cityCode": "02",
+      "zipCode": 246175,
+      "countryCode": "01"
+    }
+  ]
+
+
+}

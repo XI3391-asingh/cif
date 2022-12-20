@@ -1,0 +1,284 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Open API Specification for Party
+paths:
+  /party:
+    post:
+      summary: Create Party
+      operationId: createParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyRequestCmd'
+      responses:
+        '201':
+          description: Party Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponseCmd'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailureResponseCmd'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /party/searchbymobile:
+    post:
+      summary: Verify mobile Number
+      operationId: searchByMobileNumber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartySearchCmd'
+      responses:
+        '200':
+          description: Mobile Number Verification Complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartySearchResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    PartyRequestCmd:
+      type: object
+      required:
+        - party
+      properties:
+        party:
+          $ref: '#/components/schemas/PartyCmd'
+        occupationDetail:
+          $ref: '#/components/schemas/OccupationDetailCmd'
+        partyFlag:
+          $ref: '#/components/schemas/PartyFlagCmd'
+        address:
+          $ref: '#/components/schemas/Address'
+    PartyResponseCmd:
+      type: object
+      properties:
+        party:
+          $ref: '#/components/schemas/PartyCmd'
+        occupationDetail:
+          $ref: '#/components/schemas/OccupationDetailCmd'
+        partyFlag:
+          $ref: '#/components/schemas/PartyFlagCmd'
+        address:
+          $ref: '#/components/schemas/Address'
+    PartyCmd:
+      required:
+        - partyType
+        - fullName
+        - firstName
+        - lastName
+        - dateOfBirth
+        - primaryMobileNumber
+        - status
+        - nationalIdTypeCode
+        - jobPositionTypeCode
+        - nationalId
+        - amlRisk
+        - amlRiskEvalDate
+      type: object
+      properties:
+        partyId:
+          type: integer
+        partyType:
+          type: string
+        fullName:
+          maxLength: 100
+          type: string
+        firstName:
+          maxLength: 100
+          type: string
+        middleName:
+          maxLength: 100
+          type: string
+        lastName:
+          maxLength: 100
+          type: string
+        gender:
+          maxLength: 20
+          type: string
+        maritalStatus:
+          type: string
+        dateOfBirth:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: DOB in DD-MM-YYYY format
+        primaryMobileNumber:
+          minLength: 10
+          maxLength: 14
+          type: string
+        primaryEmail:
+          type: string
+          format: email
+        status:
+          type: string
+        taxId:
+          type: string
+        jobPositionTypeCode:
+          type: string
+        jobPosition:
+          type: string
+        nationalIdTypeCode:
+          type: string
+        nationalIdType:
+          type: string
+        nationalId:
+          type: string
+        nationalityCode:
+          type: string
+        nationality:
+          type: string
+        countryOfResidenceCode:
+          type: string
+        countryOfResidence:
+          type: string
+        segmentCode:
+          type: string
+        segment:
+          type: string
+        amlRisk:
+          type: string
+        amlRiskEvalDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: DOB in DD-MM-YYYY format
+        createdByChannel:
+          type: string
+        updatedByChannel:
+          type: string
+    OccupationDetailCmd:
+      required:
+        - occupationTypeCode
+      type: object
+      properties:
+        occupationTypeCode:
+          type: string
+        occupation:
+          type: string
+    PartyFlagCmd:
+      required:
+        - isAmlStatus
+        - isFactaApplicable
+      properties:
+        isAmlStatus:
+          type: boolean
+        isPep:
+          type: boolean
+        isFatcaApplicable:
+          type: boolean
+
+    Address:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/PartyAddressCmd'
+    PartyAddressCmd:
+      required:
+        - addressTypeCode
+        - addressLine1
+      properties:
+        addressTypeCode:
+          type: string
+        isDefault:
+          type: boolean
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressLine3:
+          type: string
+        wardCode:
+          type: string
+        ward:
+          type: string
+        districtCode:
+          type: string
+        district:
+          type: string
+        cityCode:
+          type: string
+        city:
+          type: string
+        zipCode:
+          type: integer
+        countryCode:
+          type: string
+        country:
+          type: string
+        partyAddressId:
+          type: integer
+    FailureResponseCmd:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+    PartySearchCmd:
+      required:
+        - mobileNumber
+      properties:
+        mobileNumber:
+          minLength: 10
+          maxLength: 10
+          type: string
+          nullable: false
+    PartySearchResponse:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyDetail'
+    PartyDetail:
+      properties:
+        partyId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        primaryMobileNumber:
+          type: string
+        primaryEmail:
+          type: string
+    BadRequestError:
+      type: array
+      items:
+        $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+    Error:
+      type: object

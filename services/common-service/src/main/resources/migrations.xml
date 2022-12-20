@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="finx">
+        <createTable tableName="otp_detail">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mobile_number" type="varchar(13)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="otp" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="otp_status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remaining_attempts_send" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="otp_expiration_time" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remaining_attempts_verify" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="blocking_time" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated_by" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="finx">
+        <addAutoIncrement tableName="otp_detail" columnName="id"
+                          columnDataType="int" startWith="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet id="3" author="finx">
+        <dropColumn tableName="otp_detail" columnName="otp"/>
+    </changeSet>
+</databaseChangeLog>

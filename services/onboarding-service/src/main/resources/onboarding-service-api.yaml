@@ -1,0 +1,299 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open API Specification for Onboarding Service
+paths:
+  /customer/verify-mobile:
+    post:
+      tags:
+        - customer
+      summary: Verify if there is an existing customer with the given mobile number
+      operationId: verifyMobileNumber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MobileNumberCmd"
+      responses:
+        '200':
+          description: No customer exists with the given mobile number
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseApi"
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseApi"
+        '409':
+          description: Customer exists with the given mobile number
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseApi"
+        '403':
+          description: Mobile number is blocked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseApi"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /onboarding/workflow/resume:
+    post:
+      tags:
+        - onboarding
+      summary: Check in workflow with the given mobile number
+      operationId: resume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingResumeCmd'
+      responses:
+        '204':
+          description: No customer exists with the given mobile number
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '409':
+          description: Customer exists with the given mobile number
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /customer/kyc:
+    post:
+      tags:
+        - KYC
+      operationId: uploadKycDetails
+      summary: Submit or update Kyc details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KycDetailRequest'
+      responses:
+        '200':
+          description: Kyc details save success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseApi"
+              example:
+                code: 200
+                status: OK
+                message: Kyc details submit successful
+        '404':
+          description: Phone number not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponseApi"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponseApi"
+  /customer/validate-email:
+    post:
+      tags:
+        - email
+      summary: Validate Email Id
+      operationId: validateEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailCmd'
+      responses:
+        '200':
+          description: Email Id is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '403':
+          description: Email Id is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    MobileNumberCmd:
+      type: object
+      required:
+        - countryCode
+        - number
+      properties:
+        countryCode:
+          type: string
+        number:
+          type: string
+    OnboardingResumeCmd:
+      type: object
+      required:
+        - number
+      properties:
+        number:
+          type: string
+    OnboardingResumeResponse:
+      properties:
+        workflowId:
+          type: string
+        workflowDefId:
+          type: string
+        workflowStageId:
+          type: string
+        workflowStatusId:
+          type: string
+    KycDetailRequest:
+      type: object
+      required:
+        - phoneNumber
+        - fullName
+        - dateOfBirth
+        - idNumber
+        - issuancePlace
+        - issuanceDate
+        - expiryDate
+        - permanentAddress
+        - isCurrentAddressSamePermanentAddress
+        - currentAddress
+        - occupation
+        - jobPosition
+        - isUSPerson
+      properties:
+        phoneNumber:
+          type: string
+          example: 0791234567
+        fullName:
+          type: string
+          example: Nguyen Van A
+          maxLength: 100
+        dateOfBirth:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/[0-9]{4}$'
+          description: DOB in DD/MM/YYYY format
+        documentType:
+          type: string
+          example: NATIONAL_ID
+        idNumber:
+          type: string
+          example: 037153000257
+        issuancePlace:
+          type: string
+          example: Ho Chi Minh City
+        issuanceDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/[0-9]{4}$'
+          description: Date in DD/MM/YYYY format
+        expiryDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/[0-9]{4}$'
+          description: Date in DD/MM/YYYY format
+        permanentAddress:
+          type: string
+          example: 123C Nguyen Van Cu Street
+          maxLength: 500
+        isCurrentAddressSamePermanentAddress:
+          type: boolean
+          example: false
+        currentAddress:
+          type: string
+          example: 456C Vo Nguyen Giap
+          maxLength: 500
+        occupation:
+          type: string
+          example: Occupation example
+        jobPosition:
+          type: string
+          example: Job position example
+        isUSPerson:
+          type: boolean
+          example: false
+        isManualVerificationNeeded:
+          type: boolean
+          example: true
+        isKycDataModified:
+          type: boolean
+          example: true
+        manualVerificationNeededReason:
+          type: string
+          example: User edited information
+        externalRequestId:
+          type: string
+    EmailCmd:
+      type: object
+      required:
+        - emailId
+      properties:
+        emailId:
+          type: string
+    ResponseApi:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        success:
+          type: boolean
+        message:
+          type: string
+    SuccessResponseApi:
+      allOf:
+        - $ref: "#/components/schemas/ResponseApi"
+        - type: object
+          properties:
+            data:
+              type: object
+    ErrorResponseApi:
+      allOf:
+        - $ref: "#/components/schemas/ResponseApi"
+        - type: object
+          properties:
+            errorCode:
+              type: string
+            additionalInfo:
+              type: object
+    BadRequestError:
+      type: array
+      items:
+        $ref: "#/components/schemas/FieldError"
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Error:
+      type: object

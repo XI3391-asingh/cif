@@ -1,0 +1,24 @@
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 11640
+  adminConnectors:
+    - type: http
+      port: 11641
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/commonservicedb}
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+
+maxValidationAttempt: 5
+maxResendOtp: 5
+blockingPeriod: 10
+codeExpirationTime: 90
+otpAttemptsReset: 24
+otp: 123456

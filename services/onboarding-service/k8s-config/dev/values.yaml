@@ -1,0 +1,148 @@
+project: galaxyfinx
+fullnameOverride: 'onboarding-service'
+environment: 'dev'
+namespace: 'dev'
+deployment:
+  component: api
+  containerPort:
+    http: 13361
+    metrics: 13362
+  replicaCount: 1
+  initContainers:
+  - name: init-liquibase
+    image:
+      tag: <+artifact.tag>
+      repository: "902615725652.dkr.ecr.ap-southeast-1.amazonaws.com/onboarding-service"
+    extraEnvs:
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: dev-onboarding-service-db-credentials
+          key: username
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: dev-onboarding-service-db-credentials
+          key: password
+    - name: POSTGRES_URL
+      value: jdbc:postgresql://dev-onboarding-service-db.cluster-ca6htujinjyy.ap-southeast-1.rds.amazonaws.com:5432/onboardingservicedb
+    resources:
+      limits:
+        cpu: 100m
+        memory: 600Mi
+      requests:
+        cpu: 50m
+        memory: 300Mi    
+    command:
+    - "java"
+    - "-jar"
+    - "/app/app.jar"
+    - db
+    - migrate
+    - config.yml
+  image:
+    registry: "902615725652.dkr.ecr.ap-southeast-1.amazonaws.com"
+    repository: onboarding-service
+    pullPolicy: IfNotPresent
+    tag: <+artifact.tag>
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '11700'
+    prometheus.io/path: '/metrics'
+  extraEnvs:
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: dev-onboarding-service-db-credentials
+        key: username
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: dev-onboarding-service-db-credentials
+        key: password
+  - name: POSTGRES_URL
+    value: jdbc:postgresql://dev-onboarding-service-db.cluster-ca6htujinjyy.ap-southeast-1.rds.amazonaws.com:5432/onboardingservicedb
+
+  livenessProbe:
+    path: /healthcheck
+    port: 13362
+    failureThreshold: 10
+    initialDelaySeconds: 20
+    timeoutSeconds: 10
+  readinessProbe:
+    path: /healthcheck
+    port: 13362
+    failureThreshold: 10
+    initialDelaySeconds: 18
+    timeoutSeconds: 10
+  resources:
+    limits:
+      cpu: 100m
+      memory: 600Mi
+    requests:
+      cpu: 50m
+      memory: 300Mi
+  volumeMounts:
+  - mountPath: /etc/secrets/onboarding-service-db-secret
+    name: onboarding-service-db-secret
+    readOnly: true
+  volumes:
+  - name: onboarding-service-db-secret
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: onboarding-service
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+  - name: http
+    port: 13361
+    targetPort: 13361
+
+istio:
+  enabled: true
+  destinationRule:
+    enabled: false
+  virtualService:
+    enabled: true
+    timeout: 1m
+    destinationport: 13361
+    host: '*'
+    gateway: ms-ingress
+    uriPrefix: 
+    - /customer
+    # rewriteuri: /v1/customer/verify-mobile
+  # authorization policy to only allow access within the namespace
+  authorizationPolicy:
+    enabled: false
+    allowedNaemspaces: []
+    # allowedNaemspaces: [ns1, ns2, ns3]
+secretProviderClass:
+  enabled: true
+  provider: aws
+  parameters:
+    objects:
+      - objectName: dev-onboarding-service-db-credentials
+        objectType: secretsmanager
+        jmesPath: 
+          - path: "username"
+            objectAlias: "SecretUsername"
+          - path: "password"
+            objectAlias: "SecretPassword"
+  secretObjects:              
+  - secretName: dev-onboarding-service-db-credentials
+    type: Opaque
+    data: 
+    - key: username
+      objectName: "SecretUsername"
+    - key: password
+      objectName: "SecretPassword"
+serviceAccount:
+  annotations: 
+     eks.amazonaws.com/role-arn: arn:aws:iam::840087460680:role/onboarding-service-irsa
+  name: 'onboarding-service'

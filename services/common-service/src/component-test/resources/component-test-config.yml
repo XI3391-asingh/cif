@@ -1,0 +1,23 @@
+database:
+  driverClass: org.postgresql.Driver
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+
+
+maxValidationAttempt: 5
+maxResendOtp: 5
+blockingPeriod: 10
+codeExpirationTime: 90
+otpAttemptsReset: 24
+otp: 123456

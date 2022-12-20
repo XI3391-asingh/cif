@@ -1,0 +1,162 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open API Specification for common service
+paths:
+  /otp:
+    post:
+      summary: Request an otp from service
+      operationId: sendOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileNumberCmd'
+      responses:
+        '200':
+          description: Send the otp response for mobile number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '403':
+          description: Mobile number is blocked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '400':
+          description: Mobile number is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /otp/verify:
+    post:
+      summary: Verify the otp from service
+      operationId: verifyOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyOtpCmd'
+      responses:
+        '200':
+          description: Verify the otp response for mobile number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '403':
+          description: Mobile number is blocked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '402':
+          description: OTP entered was wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '400':
+          description: Mobile number is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Otp is not found in system
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /otp/blocking-period-expired:
+    post:
+      summary: Checks if blocking period has expired for a mobile number
+      operationId: isBlockingPeriodExpired
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileNumberCmd'
+      responses:
+        '200':
+          description: Check and send response whether blocking period is expired or not
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '400':
+          description: Mobile number is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    MobileNumberCmd:
+      type: object
+      required:
+        - countryCode
+        - number
+      properties:
+        countryCode:
+          type: string
+        number:
+          type: string
+    VerifyOtpCmd:
+      type: object
+      required:
+        - countryCode
+        - number
+        - otp
+      properties:
+        countryCode:
+          type: string
+        number:
+          type: string
+        otp:
+          type: integer
+    ResponseApi:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+    Error:
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type: string

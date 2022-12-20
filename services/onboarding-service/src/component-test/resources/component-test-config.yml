@@ -1,0 +1,19 @@
+database:
+  driverClass: org.postgresql.Driver
+
+server:
+  applicationContextPath: /api/v1
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+
+urlSearchMobile: http://localhost:8080/party/searchbymobile
+urlCheckBlockingPeriod: http://localhost:11640/api/v1/util/blocking-period-expired

@@ -1,0 +1,20 @@
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 13361
+  adminConnectors:
+    - type: http
+      port: 13362
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/onboardingservicedb}
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+
+urlSearchMobile: https://dev.galaxyfinx.com/party/searchbymobile
+urlCheckBlockingPeriod: https://dev.galaxyfinx.com/otp/blocking-period-expired

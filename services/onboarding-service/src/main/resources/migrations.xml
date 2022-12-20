@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="finx">
+        <createTable tableName="workflows">
+            <column name="id" type="uuid" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="device_id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_details" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="finx">
+        <createTable tableName="workflow_stages">
+            <column name="id" type="uuid" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="onboarding_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_stages_workflows"
+                references="workflows(id)"/>
+            </column>
+            <column name="workflow_stage" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stage_status" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remarks" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="finx">
+        <createTable tableName="wf_master">
+            <column name="wf_def_id" type="int" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="wf_name" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+            <column name="wf_desc" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="finx">
+        <createTable tableName="wf_stage_master">
+            <column name="wf_stage_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="wf_def_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_stage_workflow"
+                             references="wf_master(wf_def_id)"/>
+            </column>
+            <column name="stage_name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stage_desc" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_stage" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="finx">
+        <createTable tableName="wf_onboarding">
+            <column name="wf_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mobile_number" type="varchar(13)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wf_def_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_wf_onboarding"
+                             references="wf_master(wf_def_id)"/>
+            </column>
+            <column name="wf_stage_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_onboard_stage"
+                             references="wf_stage_master(wf_stage_id)"/>
+            </column>
+            <column name="stage_status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="created_by" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="finx">
+        <sql>
+            INSERT INTO wf_master(wf_def_id, wf_name, wf_desc, created_on, created_by)
+            VALUES (101, 'Onboarding', 'To onboard a customer', CURRENT_TIMESTAMP, 'Finx');
+        </sql>
+        <rollback>
+            DELETE wf_master WHERE wf_def_id = 101;
+        </rollback>
+    </changeSet>
+    <changeSet id="7" author="finx">
+        <sql>
+            INSERT INTO wf_stage_master(wf_def_id, wf_stage_id, stage_name, stage_desc, created_on, created_by, order_stage)
+            VALUES (101, 1, 'verify-mobile', 'Mobile verification stage', CURRENT_TIMESTAMP, 'Finx', 1);
+        </sql>
+        <rollback>
+            DELETE wf_stage_master WHERE wf_stage_id = 1;
+        </rollback>
+    </changeSet>
+    <changeSet id="8" author="finx">
+        <sql>
+            INSERT INTO wf_stage_master(wf_def_id, wf_stage_id, stage_name, stage_desc, created_on, created_by, order_stage)
+            VALUES (101, 2, 'KYC', 'Know your customer stage', CURRENT_TIMESTAMP, 'Finx', 2);
+        </sql>
+        <rollback>
+            DELETE wf_stage_master WHERE wf_stage_id = 2;
+        </rollback>
+    </changeSet>
+    <changeSet id="9" author="finx">
+        <sql>
+            INSERT INTO wf_stage_master(wf_def_id, wf_stage_id, stage_name, stage_desc, created_on, created_by, order_stage)
+            VALUES (101, 3, 'LIVE', 'Liveliness check stage', CURRENT_TIMESTAMP, 'Finx', 3);
+        </sql>
+        <rollback>
+            DELETE wf_stage_master WHERE wf_stage_id = 3;
+        </rollback>
+    </changeSet>
+    <includeAll path="db/"/>
+</databaseChangeLog>

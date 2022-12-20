@@ -1,0 +1,54 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open API Specification for Sample Service
+  license:
+    name: MIT
+paths:
+  /todos:
+    post:
+      summary: Create a todo entry
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskCmd'
+      responses:
+        '201':
+          description: Created a todo item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTaskResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    CreateTaskCmd:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    CreateTaskResponse:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

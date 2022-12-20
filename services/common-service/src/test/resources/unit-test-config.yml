@@ -1,0 +1,25 @@
+database:
+  driverClass: org.h2.Driver
+  url: ${POSTGRES_URL:-jdbc:h2:mem:test-%s;MODE=PostgreSQL;TRACE_LEVEL_FILE=3}
+  user: ${POSTGRES_USER:-}
+  password: ${POSTGRES_PASSWORD:-}
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+
+maxValidationAttempt: 5
+maxResendOtp: 5
+blockingPeriod: 10
+codeExpirationTime: 90
+otpAttemptsReset: 24
+otp: 123456

@@ -1,0 +1,8 @@
+[versions]
+java = "17"
+
+[libraries]
+
+[plugins]
+
+[bundles]

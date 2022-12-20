@@ -1,0 +1,51 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open API Specification for masterdata service
+paths:
+  /masterdata:
+    get:
+      tags:
+        - masterdata
+      summary: List MasterData
+      operationId: masterdata
+      parameters:
+        - name: Accept-Language
+          in: header
+          schema:
+            type: string
+            default: ""
+        - name: entityName
+          in: query
+          description: Filter Options
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List Masterdata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseApi"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    ResponseApi:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+    Error:
+      type: object

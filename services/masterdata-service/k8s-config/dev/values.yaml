@@ -1,0 +1,148 @@
+project: galaxyfinx
+fullnameOverride: 'masterdata-service'
+environment: 'dev'
+namespace: 'dev'
+deployment:
+  component: api
+  containerPort:
+    http: 10885
+    metrics: 10886
+  replicaCount: 1
+  initContainers:
+    - name: init-liquibase
+      image:
+        tag: <+artifact.tag>
+        repository: "902615725652.dkr.ecr.ap-southeast-1.amazonaws.com/masterdata-service"
+      extraEnvs:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: dev-masterdata-service-db-credentials
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-masterdata-service-db-credentials
+              key: password
+        - name: POSTGRES_URL
+          value: jdbc:postgresql://dev-masterdata-service-db.cluster-ca6htujinjyy.ap-southeast-1.rds.amazonaws.com:5432/masterdataservicedb
+      resources:
+        limits:
+          cpu: 100m
+          memory: 600Mi
+        requests:
+          cpu: 50m
+          memory: 300Mi
+      command:
+        - "java"
+        - "-jar"
+        - "/app/app.jar"
+        - db
+        - migrate
+        - config.yml
+  image:
+    registry: "902615725652.dkr.ecr.ap-southeast-1.amazonaws.com"
+    repository: masterdata-service
+    pullPolicy: IfNotPresent
+    tag: <+artifact.tag>
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '11700'
+    prometheus.io/path: '/metrics'
+  extraEnvs:
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: dev-masterdata-service-db-credentials
+          key: username
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: dev-masterdata-service-db-credentials
+          key: password
+    - name: POSTGRES_URL
+      value: jdbc:postgresql://dev-masterdata-service-db.cluster-ca6htujinjyy.ap-southeast-1.rds.amazonaws.com:5432/masterdataservicedb
+
+  livenessProbe:
+    path: /healthcheck
+    port: 10886
+    failureThreshold: 10
+    initialDelaySeconds: 20
+    timeoutSeconds: 10
+  readinessProbe:
+    path: /healthcheck
+    port: 10886
+    failureThreshold: 10
+    initialDelaySeconds: 18
+    timeoutSeconds: 10
+  resources:
+    limits:
+      cpu: 100m
+      memory: 600Mi
+    requests:
+      cpu: 50m
+      memory: 300Mi
+  volumeMounts:
+    - mountPath: /etc/secrets/masterdata-service-db-secret
+      name: masterdata-service-db-secret
+      readOnly: true
+  volumes:
+    - name: masterdata-service-db-secret
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: masterdata-service
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+    - name: http
+      port: 10885
+      targetPort: 10885
+
+istio:
+  enabled: true
+  destinationRule:
+    enabled: false
+  virtualService:
+    enabled: true
+    timeout: 1m
+    destinationport: 10885
+    host: '*'
+    gateway: ms-ingress
+    uriPrefix: 
+    - /masterdata
+    # rewriteuri: /v1/customer/verify-mobile
+  # authorization policy to only allow access within the namespace
+  authorizationPolicy:
+    enabled: false
+    allowedNaemspaces: []
+    # allowedNaemspaces: [ns1, ns2, ns3]
+secretProviderClass:
+  enabled: true
+  provider: aws
+  parameters:
+    objects:
+      - objectName: dev-masterdata-service-db-credentials
+        objectType: secretsmanager
+        jmesPath:
+          - path: "username"
+            objectAlias: "SecretUsername"
+          - path: "password"
+            objectAlias: "SecretPassword"
+  secretObjects:
+    - secretName: dev-masterdata-service-db-credentials
+      type: Opaque
+      data:
+        - key: username
+          objectName: "SecretUsername"
+        - key: password
+          objectName: "SecretPassword"
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::840087460680:role/masterdata-service-irsa
+  name: 'masterdata-service'
