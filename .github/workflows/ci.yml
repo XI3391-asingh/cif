@@ -29,7 +29,8 @@ jobs:
     
     - name: Execute Gradle build
       run: |
-        cd services/$Project_Name/
+        cd services
+        cd /$Project_Name/
        ./gradlew build
       env:
         Project_Name: cif-service
