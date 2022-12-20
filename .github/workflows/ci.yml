@@ -16,9 +16,8 @@ jobs:
     defaults:
       run:
         working-directory: services/$Project_Name
-
-    # env:
-    #   Project_Name: cif-service
+    env:
+      Project_Name: cif-service
 
     steps:
     - uses: actions/checkout@v3
