@@ -26,7 +26,7 @@ jobs:
     - name: Build with Gradle
       run: |
           cd services/$Project_Name/
-          ./gradlew build 
+          gradlew build 
       env:
           Project_Name: cif-service
       # uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
