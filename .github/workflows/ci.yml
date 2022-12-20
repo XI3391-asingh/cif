@@ -5,8 +5,7 @@ on:
     branches: [ "main", "actions" ]
   pull_request:
     branches: [ "main", "actions" ]
-  
-  paths: ./services/cif-service
+    paths: ./services/cif-service
 
 permissions:
   contents: read
