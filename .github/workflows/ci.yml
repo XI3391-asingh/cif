@@ -28,6 +28,7 @@ jobs:
       run: chmod +x gradlew
     
     - name: Path for Gradle build
+      uses: actions/checkout@v3
       working-directory: services/$Project_Name
       env:
         Project_Name: cif-service
