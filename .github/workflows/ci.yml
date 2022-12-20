@@ -13,11 +13,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: services/$Project_Name
     env:
       Project_Name: cif-service
+    defaults:
+      run:
+        working-directory: services/${env.Project_Name}
 
     steps:
     - uses: actions/checkout@v3
