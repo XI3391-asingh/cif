@@ -27,8 +27,6 @@ jobs:
     - name: Grant execute permission for gradlew
       working-directory: services/$Project_Name
       run: chmod +x gradlew
-      env:
-          Project_Name: cif-service
     
     - name: Gradle build
       working-directory: services/$Project_Name
