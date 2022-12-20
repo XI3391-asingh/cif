@@ -5,6 +5,8 @@ on:
     branches: [ "main", "actions" ]
   pull_request:
     branches: [ "main", "actions" ]
+  
+  paths: ./services/cif-service
 
 permissions:
   contents: read
@@ -28,9 +30,6 @@ jobs:
       run: chmod +x gradlew
     
     - name: Gradle build
-      working-directory: ./services/$Project_Name
-      env:
-        $Project_Name: cif-service
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
         arguments: build
