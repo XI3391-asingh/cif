@@ -1,0 +1,17 @@
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: {{ cookiecutter.service_port }}
+  adminConnectors:
+    - type: http
+      port: {{ cookiecutter.admin_port}}
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/{{ cookiecutter.db_name }}}
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}

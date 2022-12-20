@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "d48af7e8-04cb-4e6a-86f5-91d34b5c2392",
+		"name": "Syncer Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Change Config Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"systemCode\": \"\",\r\n    \"isActive\": true,\r\n    \"configFields\": [\r\n          \"firstName\",\r\n\t\t  \"fullName\",\r\n          \"primaryEmail\",\r\n          \"primaryMobileNumber\",\r\n          \"dateOfBirth\",\r\n          \"nationalityCode\",\r\n          \"lastName\",\r\n          \"middleName\",\r\n\t\t  \"amlRisk\"\r\n    ],\r\n    \"apiDetails\": {\r\n        \"baseUrl\": \"\",\r\n        \"create\": {\r\n            \"endPoint\": \"\",\r\n            \"authToken\": \"=\"\r\n        },\r\n        \"update\": {\r\n            \"endPoint\": \"\",\r\n            \"authToken\": \"=\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/config/",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"config",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Change Config Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"systemCode\": \"MAX\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/config/fetch",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"config",
+						"fetch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Change Config Data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"configId\": 2,\r\n        \"systemId\": 8,\r\n        \"systemCode\": \"MAX\",\r\n        \"isActive\": true,\r\n        \"configFields\": [\r\n            \"firstName\",\r\n            \"primaryMobileNumber\",\r\n            \"primaryEmail\"\r\n        ],\r\n        \"apiDetails\": {\r\n            \"baseUrl\": \"\",\r\n            \"create\": {\r\n                \"endPoint\": \"customers\",\r\n                \"authToken\": \"\"\r\n            },\r\n            \"update\": {\r\n                \"endPoint\": \"customers/{customerId}\",\r\n                \"authToken\": \"\"\r\n            }\r\n        }\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/config/",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"config",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Adapter Config Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sourceSystemCode\": \"TEST1\",\r\n    \"integrationSystemCode\": \"TEST2\",\r\n    \"isCreate\": true,\r\n    \"isUpdate\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/adapter/",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"adapter",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Adapter Config Data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"adapterConfigId\": 7,\r\n    \"sourceSystemId\": 8,\r\n    \"integrationSystemId\": 7,\r\n    \"sourceSystemCode\": \"MAX\",\r\n    \"integrationSystemCode\": \"TEST4\",\r\n    \"isCreate\": false,\r\n    \"isUpdate\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/adapter/",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"adapter",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Adapter Config",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"systemCode\":null,\r\n    \"systemId\":7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{syncer-host}}/adapter/fetch/",
+					"host": [
+						"{{syncer-host}}"
+					],
+					"path": [
+						"adapter",
+						"fetch",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

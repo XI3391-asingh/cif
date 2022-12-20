@@ -1,0 +1,18 @@
+{
+  "systemCode":"TEST",
+  "isActive":true,
+  "configFields":[
+    "firstName"
+  ],
+  "apiDetails":{
+    "baseUrl":"",
+    "create":{
+      "endPoint":"customers",
+      "authToken":""
+    },
+    "update":{
+      "endPoint":"customers",
+      "authToken":""
+    }
+  }
+}

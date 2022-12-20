@@ -1,4 +1,4 @@
-# FinX Local Development
+# CIF Local Development
 
 This document covers how to setup your local machine for development.
 
@@ -10,7 +10,7 @@ This document covers how to setup your local machine for development.
 curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash && . ~/.jabba/jabba.sh
 ```
 ```shell
-jabba install zulu@1.17.0-0
+jabba install zulu@1.17.0
 ```
 
 2. **IntelliJ Idea Community Edition: Java IDE** : Install the latest version of Intellij from [here](https://www.jetbrains.com/idea/download)
@@ -62,7 +62,7 @@ chmod +x ~/install-talisman.sh
 And, now install talisman pre-commit hook
 
 ```
-cd <finx-ms-repo>
+cd <cif-ms-repo>
 ~/install-talisman.sh pre-commit
 ```
 
@@ -146,7 +146,7 @@ psql postgresql://postgres:postgres@localhost:5432/postgres
 
 You can use DBeaver or pgAdmin to access Postgres. If you use pgAdmin the host has to be `db` because pgAdmin connects with the docker container. 
 
-pgAdmin runs on http://localhost:5050/browser/. The default username/password combination is `pg@finx.com/admin`.
+pgAdmin runs on http://localhost:5050/browser/. The default username/password combination is `pg@cif.com/admin`.
 
 ### Using local SonarQube
 

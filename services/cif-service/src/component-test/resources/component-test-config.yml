@@ -1,0 +1,79 @@
+database:
+  driverClass: org.postgresql.Driver
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+
+
+eventPosting:
+  allow: false
+
+consumer:
+  type: basic
+  name: cif_consumer
+  topics:
+    - cif_topic1
+  bootstrapServers: localhost:9092
+  consumerGroupId: cif_consumer_group
+  keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  autoOffsetReset: earliest
+  autoCommitEnabled: false
+
+producer:
+  type: basic
+  topic: cif_topic
+  bootstrapServers: 127.0.0.1:9092
+  name: producerNameToBeUsedInMetrics
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.cif.cifservice.core.party.util.DataSerializer
+  acks: all
+  retries: 3
+  maxInFlightRequestsPerConnection: 1
+
+elasticsearch:
+  host: http://localhost
+  port: 9200
+  party_index: party_v1
+  activity_posting_index: activity_posting
+  admin_cif_index:  admin_config
+
+swagger:
+  resourcePackage: com.cif.cifservice.resources
+
+universalSearchFields:
+    text:
+      - party.firstName
+      - party.lastName
+      - party.fullName
+    number:
+      - party.primaryMobileNumber
+      - party.dateOfBirth
+      - party.nationalId
+      - party.referralCode
+    email:
+      - party.primaryEmail
+    date:
+      - party.dateOfBirth
+    specialChar:
+      - party.dateOfBirth
+
+encryption:
+  secretKey: test@1234567#cif
+  fields:
+    - party.firstName
+  encryptionFlag: TRUE
+
+bulkImportConfig:
+  tempPath: ${TEMP_PATH:- //tmp//MasterData.xlsx}
+

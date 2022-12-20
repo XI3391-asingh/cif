@@ -4,6 +4,10 @@ fileignoreconfig:
   - password:\ \$\{POSTGRES_PASSWORD\}
 - filename: services/onboarding-service/src/main/resources/migrations.xml
   allowed_patterns: [primaryKey]
+- filename: services/onboarding-service/src/componentTest/java/com/finx/onboardingservice/ct/AbstractComponentTest.java
+  checksum: 6724ec40af5ef1273138d98f11e869adbcaa8f515b8a66272f43c49b50622298
+- filename: services/onboarding-service/src/componentTest/java/com/finx/onboardingservice/stories/CreateOnboardingWorkflowStoryTest.java
+  checksum: 4d936004cfa663f4b3fd852c4568997af7973ee9953effb47fdb5ab40e5d2647
 - filename: services/customer-service/config.yml
   allowed_patterns:
   - password:\ \$\{POSTGRES_PASSWORD\}
@@ -19,6 +23,3 @@ fileignoreconfig:
   - password:\ \$\{POSTGRES_PASSWORD\}
 - filename: services/sample-service/src/main/resources/migrations.xml
   allowed_patterns: [primaryKey]
-- filename: services/onboarding-service/src/component-test/java/com/finx/stories/onboardingservice/AbstractStoryTest.java
-  allowed_patterns:
-  - ConfigOverride.config\(\"database.password\",\ POSTGRES_CONTAINER\:\:getPassword\)

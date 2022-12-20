@@ -1,0 +1,37 @@
+{
+  "type": "UNIVERSALSEARCHFIELDS",
+  "configData": [
+    {
+      "key": "EMAIL",
+      "values": [
+        "party.primaryEmail"
+      ]
+    },
+    {
+      "key": "TEXT",
+      "values": [
+        "party.firstName",
+        "party.lastName",
+        "party.lastName"
+      ]
+    },
+    {
+      "key": "NUMBER",
+      "values": [
+        "party.dateOfBirth"
+      ]
+    },
+    {
+      "key": "DATE",
+      "values": [
+        "party.dateOfBirth"
+      ]
+    },
+    {
+      "key": "SPECIALCHAR",
+      "values": [
+        "party.dateOfBirth"
+      ]
+    }
+  ]
+}

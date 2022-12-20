@@ -1,0 +1,1079 @@
+{
+	"info": {
+		"_postman_id": "3e0ca1fa-185c-475f-a241-128d1370b916",
+		"name": "Customer Service API(CIF)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18790337"
+	},
+	"item": [
+		{
+			"name": "Party",
+			"item": [
+				{
+					"name": "Create Party",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"party\": {\r\n    \"partyIdentifier\":\"1234578899\",\r\n    \"type\": \"CUSTOMER\",\r\n    \"salutationCode\": \"01\",\r\n    \"fullName\": \"Joi Bristo Regino\",\r\n    \"firstName\": \"Joi\",\r\n    \"middleName\": \"Bristo\",\r\n    \"lastName\": \"Regino\",\r\n    \"mothersMaidenName\": \"Mia\",\r\n    \"nickName\": \"Jo\",\r\n    \"gender\": \"MALE\",\r\n    \"dateOfBirth\": \"30-11-1997\",\r\n    \"placeOfBirth\": \"Da Nang\",\r\n    \"primaryMobileNumber\": \"9088563701\",\r\n    \"primaryEmail\": \"joibristo434@gmail.com\",\r\n    \"maritalStatus\": \"SINGLE\",\r\n    \"status\": \"ACTIVE\",\r\n    \"nationalIdTypeCode\": \"01\",\r\n    \"nationalId\": \"80033848\",\r\n    \"referralCode\": \"RC01\",\r\n    \"promoCode\": \"T01\",\r\n    \"relationTypeCode\": \"01\",\r\n    \"segmentCode\": \"01\",\r\n    \"countryOfBirthCode\": \"01\",\r\n    \"nationalityCode\": \"01\",\r\n    \"educationTypeCode\": \"01\",\r\n    \"isStaff\": true,\r\n    \"staffCode\": \"S22\",\r\n    \"groupCode\": \"G21\",\r\n    \"portfolioCode\": \"PP12\",\r\n    \"countryOfResidenceCode\": \"01\",\r\n    \"residencyTypeCode\": \"01\",\r\n    \"jobPositionTypeCode\": \"02\",\r\n    \"amlRisk\": \"MEDIUM\",\r\n    \"amlRiskEvalDate\": \"20-11-2003\",\r\n    \"amlCheckStatus\": false,\r\n    \"createdByChannel\": \"Web\"\r\n  },\r\n  \"occupationDetail\": {\r\n    \"professionCode\": \"01\",\r\n    \"professionTypeCode\": \"01\",\r\n    \"industryTypeCode\": \"03\",\r\n    \"companyTypeCode\": \"01\",\r\n    \"annualIncome\": 91019,\r\n    \"annualTurnover\": 877887,\r\n    \"taxId\": \"TX01\",\r\n    \"dateOfInCorporation\": \"05-10-1980\"\r\n  },\r\n  \"address\": [\r\n    {\r\n      \"addressTypeCode\": \"01\",\r\n      \"isDefault\": true,\r\n      \"addressLine1\": \"14/12 Ky Dong Street\",\r\n      \"addressLine2\": \"Ward 3, District 17\",\r\n      \"addressLine3\": \"HCMC\",\r\n      \"wardCode\": \"01\",\r\n      \"districtCode\": \"01\",\r\n      \"cityCode\": \"01\",\r\n      \"cityZipCode\": 11001,\r\n      \"countryCode\": \"02\",\r\n      \"documentId\": \"01\"\r\n    }\r\n  ],\r\n  \"contactDetails\": [\r\n    {\r\n      \"contactTypeCode\": \"01\",\r\n      \"contactValue\": \"9918831234\",\r\n      \"isdCode\": \"84\",\r\n      \"isPrimary\": true,\r\n      \"isVerified\": true,\r\n      \"verifiedMode\": \"verified\",\r\n      \"lastVerifiedDate\": \"30-08-1982\",\r\n      \"isDnd\": true\r\n    }\r\n  ],\r\n  \"assets\": [\r\n    {\r\n      \"assetTypeCode\": \"01\",\r\n      \"assetName\": \"house\",\r\n      \"potentialValue\": 99999999,\r\n      \"isMortgaged\": true\r\n    }\r\n  ],\r\n  \"memos\": [\r\n    {\r\n      \"memoTypeCode\": \"01\",\r\n      \"severity\": \"S1\",\r\n      \"score\": 11,\r\n      \"validFrom\": \"03-11-1901\",\r\n      \"validTo\": \"02-11-1915\"\r\n    }\r\n  ],\r\n  \"risks\": [\r\n    {\r\n      \"riskTypeCode\": \"01\",\r\n      \"riskScore\": 11,\r\n      \"evaluationDate\": \"02-04-2090\",\r\n      \"validUntil\": \"20-03-2098\"\r\n    }\r\n  ],\r\n  \"fatcaDetails\": [\r\n    {\r\n      \"placeOfIncorporation\": \"Da Nang\",\r\n      \"countryOfIncorporation\": \"Vietnam\",\r\n      \"countryOfResidence\": \"Vietnam\",\r\n      \"incorporationNumber\": \"01\",\r\n      \"boardRelNumber\": \"BR01\",\r\n      \"reportBlNumber\": \"R01\",\r\n      \"originalReportBlNumber\": \"OR1\",\r\n      \"fatcaTaxId\": \"01\",\r\n      \"documentReferenceId\": \"11\"\r\n    }\r\n  ],\r\n  \"guardians\": [\r\n    {\r\n      \"guardianFirstName\": \"Anh\",\r\n      \"guardianMiddleName\": \"Van\",\r\n      \"guardianLastName\": \"Duc\",\r\n      \"guardianRelation\": \"Father\",\r\n      \"guardianAddressLine1\": \"Da Nang\",\r\n      \"guardianAddressLine2\": \"House 14\",\r\n      \"guardianAddressLine3\": \"District 17\",\r\n      \"guardianWardCode\": \"01\",\r\n      \"guardianDistrictCode\": \"01\",\r\n      \"guardianCityCode\": \"01\"\r\n    }\r\n  ],\r\n  \"relations\": [\r\n    {\r\n      \"secondaryPartyId\": \"02\",\r\n      \"partyRelationTypeCode\": \"01\",\r\n      \"invRelation\": \"Y\"\r\n    }\r\n  ],\r\n  \"xrefs\": [\r\n    {\r\n      \"systemCode\": \"01\",\r\n      \"xrefId\": \"11\"\r\n    }\r\n  ],\r\n  \"accountMappings\": [\r\n    {\r\n      \"accountId\": \"01\",\r\n      \"relation\": \"daughter\"\r\n    }\r\n  ],\r\n  \"documents\": [\r\n    {\r\n      \"documentTypeCode\": \"01\",\r\n      \"documentNumber\": \"11\",\r\n      \"documentNumberMasked\": \"01\",\r\n      \"documentNumberToken\": \"02\",\r\n      \"issuingDate\": \"14-05-1972\",\r\n      \"expiryDate\": \"24-05-1979\",\r\n      \"issuingPlace\": \"Dong Nai\",\r\n      \"issuingCountryCode\": \"01\",\r\n      \"isPoi\": true,\r\n      \"isPoa\": true,\r\n      \"dmsReferenceId\": \"01\",\r\n      \"verificationStatus\": \"verified\",\r\n      \"additionalData\": \"Y\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}",
+							"host": [
+								"{{dev_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search party by cif identifier",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "id",
+								"value": "1",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/?id=1234578899",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1234578899"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Party",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"party\": {\r\n            \"partyIdentifier\": \"1234578899\",\r\n            \"type\": \"CUSTOMER\",\r\n            \"salutationCode\": \"01\",\r\n            \"salutation\": \"Mr.\",\r\n            \"fullName\": \"Jenny Astro Reg\",\r\n            \"firstName\": \"Jenny\",\r\n            \"middleName\": \"Astro\",\r\n            \"lastName\": \"Reg\",\r\n            \"mothersMaidenName\": \"Mia\",\r\n            \"nickName\": \"Jo\",\r\n            \"gender\": \"MALE\",\r\n            \"dateOfBirth\": \"30-11-1997\",\r\n            \"placeOfBirth\": \"Da Nang\",\r\n            \"primaryMobileNumber\": \"9088503701\",\r\n            \"primaryEmail\": \"joibristo434@gmail.com\",\r\n            \"maritalStatus\": \"SINGLE\",\r\n            \"status\": \"ACTIVE\",\r\n            \"nationalIdTypeCode\": \"01\",\r\n            \"nationalIdType\": \"National Id\",\r\n            \"nationalId\": \"80033848\",\r\n            \"referralCode\": \"RC01\",\r\n            \"promoCode\": \"T01\",\r\n            \"relationTypeCode\": \"01\",\r\n            \"relationType\": \"Relation 1\",\r\n            \"segmentCode\": \"01\",\r\n            \"segment\": \"Segment01\",\r\n            \"countryOfBirthCode\": \"01\",\r\n            \"countryOfBirth\": \"Vietnam\",\r\n            \"nationalityCode\": \"01\",\r\n            \"nationality\": \"Vietnamese\",\r\n            \"educationTypeCode\": \"01\",\r\n            \"educationType\": \"Postgraduate\",\r\n            \"isStaff\": true,\r\n            \"staffCode\": \"S22\",\r\n            \"groupCode\": \"G21\",\r\n            \"portfolioCode\": \"PP12\",\r\n            \"countryOfResidenceCode\": \"01\",\r\n            \"countryOfResidence\": \"Vietnam\",\r\n            \"residencyTypeCode\": \"01\",\r\n            \"residencyType\": \"Vietnam Residency 1\",\r\n            \"jobPositionTypeCode\": \"02\",\r\n            \"jobPosition\": \"Specialist\",\r\n            \"amlRisk\": \"MEDIUM\",\r\n            \"amlRiskEvalDate\": \"20-11-2003\",\r\n            \"amlCheckStatus\": false,\r\n            \"createdAt\": \"20-10-2022T10:07:16\",\r\n            \"createdBy\": \"SYSTEM\",\r\n            \"updatedAt\": null,\r\n            \"updatedBy\": null,\r\n            \"createdByChannel\": \"Web\",\r\n            \"updatedByChannel\": null,\r\n            \"sourceSystem\": null,\r\n            \"isDeleted\": false\r\n        },\r\n        \"occupationDetail\": {\r\n            \"professionCode\": \"01\",\r\n            \"profession\": \"Managers\",\r\n            \"professionTypeCode\": \"01\",\r\n            \"professionType\": \"Business analyst\",\r\n            \"industryTypeCode\": \"03\",\r\n            \"industryType\": \"Banking\",\r\n            \"companyTypeCode\": \"01\",\r\n            \"company\": \"Vietnam Electricity\",\r\n            \"annualIncome\": 91019,\r\n            \"annualTurnover\": 877887,\r\n            \"taxId\": \"TX01\",\r\n            \"dateOfInCorporation\": \"05-10-1980\"\r\n        },\r\n        \"partyFlag\": {\r\n            \"isDeceased\": false,\r\n            \"isSolvency\": false,\r\n            \"isNpa\": false,\r\n            \"isWillFullDefaulter\": false,\r\n            \"willFullDefaulterDate\": null,\r\n            \"isLoanOverDue\": false,\r\n            \"isSuitFiled\": false,\r\n            \"isPoliticallyExposed\": false,\r\n            \"isFatcaApplicable\": false,\r\n            \"isEmailStatementReg\": false,\r\n            \"isUnderWatchList\": false\r\n        },\r\n        \"address\": [\r\n            {\r\n                \"addressTypeCode\": \"01\",\r\n                \"isDefault\": true,\r\n                \"addressLine1\": \"14/12 Ky Dong Street\",\r\n                \"addressLine2\": \"Ward 3, District 17\",\r\n                \"addressLine3\": \"HCMC\",\r\n                \"wardCode\": \"01\",\r\n                \"districtCode\": \"01\",\r\n                \"cityCode\": \"01\",\r\n                \"cityZipCode\": 11001,\r\n                \"countryCode\": \"02\",\r\n                \"documentId\": \"01\",\r\n                \"partyAddressId\": 8,\r\n                \"ward\": \"Hanoi\",\r\n                \"district\": \"district7\",\r\n                \"city\": \"Hồ Chí Minh\",\r\n                \"country\": \"Singapore\"\r\n            }\r\n        ],\r\n        \"contactDetails\": [\r\n            {\r\n                \"contactTypeCode\": \"01\",\r\n                \"contactValue\": \"9918831234\",\r\n                \"isdCode\": \"84\",\r\n                \"isPrimary\": true,\r\n                \"isVerified\": true,\r\n                \"verifiedMode\": \"verified\",\r\n                \"lastVerifiedDate\": \"30-08-1982\",\r\n                \"isDnd\": true,\r\n                \"partyContactDetailsId\": 8,\r\n                \"contactType\": \"Mobile\"\r\n            }\r\n        ],\r\n        \"assets\": [\r\n            {\r\n                \"assetTypeCode\": \"01\",\r\n                \"assetName\": \"house\",\r\n                \"potentialValue\": 99999999,\r\n                \"isMortgaged\": true,\r\n                \"partyAssetId\": 8,\r\n                \"assetType\": \"Car\"\r\n            }\r\n        ],\r\n        \"memos\": [\r\n            {\r\n                \"memoTypeCode\": \"01\",\r\n                \"severity\": \"S1\",\r\n                \"score\": 11.0,\r\n                \"validFrom\": \"03-11-1901\",\r\n                \"validTo\": \"02-11-1915\",\r\n                \"partyMemoId\": 8,\r\n                \"memoType\": \"Confirmation\"\r\n            }\r\n        ],\r\n        \"risks\": [\r\n            {\r\n                \"riskTypeCode\": \"01\",\r\n                \"riskScore\": 11.0,\r\n                \"evaluationDate\": \"02-04-2090\",\r\n                \"validUntil\": \"20-03-2098\",\r\n                \"partyRiskId\": 8,\r\n                \"riskType\": \"Low\"\r\n            }\r\n        ],\r\n        \"fatcaDetails\": [\r\n            {\r\n                \"placeOfIncorporation\": \"Da Nang\",\r\n                \"countryOfIncorporation\": \"Vietnam\",\r\n                \"countryOfResidence\": \"Vietnam\",\r\n                \"incorporationNumber\": \"01\",\r\n                \"boardRelNumber\": \"BR01\",\r\n                \"reportBlNumber\": \"R01\",\r\n                \"originalReportBlNumber\": \"OR1\",\r\n                \"fatcaTaxId\": \"01\",\r\n                \"documentReferenceId\": \"11\",\r\n                \"partyFatcaDetailsId\": 8\r\n            }\r\n        ],\r\n        \"guardians\": [\r\n            {\r\n                \"guardianFirstName\": \"Anh\",\r\n                \"guardianMiddleName\": \"Van\",\r\n                \"guardianLastName\": \"Duc\",\r\n                \"guardianRelation\": \"Father\",\r\n                \"guardianAddressLine1\": \"Da Nang\",\r\n                \"guardianAddressLine2\": \"House 14\",\r\n                \"guardianAddressLine3\": \"District 17\",\r\n                \"guardianWardCode\": \"01\",\r\n                \"guardianDistrictCode\": \"01\",\r\n                \"guardianCityCode\": \"01\",\r\n                \"partyGuardianId\": 11,\r\n                \"guardianWard\": \"Hanoi\",\r\n                \"guardianDistrict\": \"district7\"\r\n            }\r\n        ],\r\n        \"relations\": [\r\n            {\r\n                \"secondaryPartyId\": \"02\",\r\n                \"partyRelationTypeCode\": \"01\",\r\n                \"invRelation\": \"Y\",\r\n                \"partyRelationId\": 8,\r\n                \"partyRelationType\": \"Relation 1\"\r\n            }\r\n        ],\r\n        \"xrefs\": [\r\n            {\r\n                \"systemCode\": \"01\",\r\n                \"xrefId\": \"11\",\r\n                \"partyXrefId\": 8\r\n            }\r\n        ],\r\n        \"documents\": [\r\n            {\r\n                \"documentTypeCode\": \"01\",\r\n                \"documentNumber\": \"11\",\r\n                \"documentNumberMasked\": \"01\",\r\n                \"documentNumberToken\": \"02\",\r\n                \"issuingDate\": \"14-05-1972\",\r\n                \"expiryDate\": \"24-05-1979\",\r\n                \"issuingPlace\": \"Dong Nai\",\r\n                \"issuingCountryCode\": \"01\",\r\n                \"issuingCountry\": \"Vietnam\",\r\n                \"isPoi\": true,\r\n                \"isPoa\": true,\r\n                \"dmsReferenceId\": \"01\",\r\n                \"verificationStatus\": \"verified\",\r\n                \"additionalData\": \"Y\",\r\n                \"partyDocumentId\": 8,\r\n                \"documentType\": \"Passport\"\r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/update",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Party",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyIdentifier\":\"1234578899\",\r\n  \"firstName\": \"Joi\",\r\n  \"lastName\": \"Regino\",\r\n  \"mobileNumber\": \"9088563701\",\r\n  \"emailId\": \"joibristo434@gmail.com\",\r\n  \"dateOfBirth\": \"30-11-1997\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/search?limit=10&offset=0&sortingOrder=asc&isDelete=false",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "sortingOrder",
+									"value": "asc"
+								},
+								{
+									"key": "isDelete",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update party email",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyIdentifier\": \"1234578899\",\r\n  \"primaryEmail\": \"test@gamil.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/update/email",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"update",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update party mobile number",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyIdentifier\": \"1234578899\",\r\n  \"primaryMobileNumber\": \"9400000290\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/update/mobilenumber",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"update",
+								"mobilenumber"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update party status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyIdentifier\": \"1234578899\",\r\n  \"status\": \"INACTIVE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/update/status",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"update",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update party record for soft delete",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyIdentifier\": \"1234578899\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/soft-delete",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"soft-delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Advance Search",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"must\": [\r\n    {\r\n      \"occupationDetail.industryTypeCode\": \"11\"\r\n      \r\n    }\r\n  ],\r\n  \"optional\": [\r\n    \r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/advance-search",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"advance-search"
+							]
+						},
+						"description": "Elastics search"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Create address",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"addressTypeCode\": \"01\",\r\n    \"isDefault\": true,\r\n    \"addressLine1\": \"14/12 Ky Dong Street\",\r\n    \"addressLine2\": \"Ward 3, District 17\",\r\n    \"addressLine3\": \"HCMC\",\r\n    \"wardCode\": \"01\",\r\n    \"districtCode\": \"D01\",\r\n    \"cityCode\": \"11\",\r\n    \"cityZipCode\": 11001,\r\n    \"countryCode\": \"01\",\r\n    \"documentId\": \"01\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/address",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update address",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"addressTypeCode\": \"01\",\r\n  \"isDefault\": true,\r\n  \"addressLine1\": \"14/12 Ky Dong Street\",\r\n  \"addressLine2\": \"Ward 3, District 17\",\r\n  \"addressLine3\": \"HCMC\",\r\n  \"wardCode\": \"01\",\r\n  \"districtCode\": \"D01\",\r\n  \"cityCode\": \"11\",\r\n  \"cityZipCode\": 11001,\r\n  \"countryCode\": \"84\",\r\n  \"documentId\": \"01\",\r\n  \"partyAddressId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/address/17",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"address",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all address",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/address/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"address",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch address",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/address/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"address",
+								"01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete address",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/address/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"address",
+								"01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "Create contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"contactTypeCode\": \"01\",\r\n    \"contactValue\": \"9918831234\",\r\n    \"isdCode\": \"84\",\r\n    \"isPrimary\": true,\r\n    \"isVerified\": true,\r\n    \"verifiedMode\": \"verified\",\r\n    \"lastVerifiedDate\": \"30-08-1982\",\r\n    \"isDnd\": true\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/contacts",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update contacts",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"contactTypeCode\": \"01\",\r\n  \"contactValue\": \"9918831234\",\r\n  \"isdCode\": \"84\",\r\n  \"isPrimary\": true,\r\n  \"isVerified\": true,\r\n  \"verifiedMode\": \"verified\",\r\n  \"lastVerifiedDate\": \"30-08-1982\",\r\n  \"isDnd\": true,\r\n  \"partyContactDetailsId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/contacts/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"contacts",
+								"01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all contacts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/contacts/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch contact",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/contacts/017",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"contacts",
+								"017"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/contact/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"contact",
+								"01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Document",
+			"item": [
+				{
+					"name": "Create documents",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"documentTypeCode\": \"01\",\r\n    \"documentNumber\": \"11\",\r\n    \"documentNumberMasked\": \"01\",\r\n    \"documentNumberToken\": \"02\",\r\n    \"issuingDate\": \"14-05-1972\",\r\n    \"expiryDate\": \"24-05-1979\",\r\n    \"issuingPlace\": \"Dong Nai\",\r\n    \"issuingCountryCode\": \"01\",\r\n    \"issuingCountry\": \"vietnam\",\r\n    \"isPoi\": true,\r\n    \"isPoa\": true,\r\n    \"dmsReferenceId\": \"01\",\r\n    \"verificationStatus\": \"verified\",\r\n    \"additionalData\": \"Y\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:11699/party/1234578899/documents",
+							"host": [
+								"localhost"
+							],
+							"port": "11699",
+							"path": [
+								"party",
+								"1234578899",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update document",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"documentTypeCode\": \"01\",\r\n  \"documentNumber\": \"11\",\r\n  \"documentNumberMasked\": \"01\",\r\n  \"documentNumberToken\": \"02\",\r\n  \"issuingDate\": \"14-05-1972\",\r\n  \"expiryDate\": \"24-05-1979\",\r\n  \"issuingPlace\": \"Dong Nai\",\r\n  \"issuingCountryCode\": \"84\",\r\n  \"issuingCountry\": \"vietnam\",\r\n  \"isPoi\": true,\r\n  \"isPoa\": true,\r\n  \"dmsReferenceId\": \"01\",\r\n  \"verificationStatus\": \"verified\",\r\n  \"additionalData\": \"Y\",\r\n  \"partyDocumentId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/documents/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"documents",
+								"01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all documents",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/documents/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"documents",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/documents/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"documents",
+								"01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete documents",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/document/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"document",
+								"01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Risk",
+			"item": [
+				{
+					"name": "Create risk",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"riskTypeCode\": \"01\",\r\n    \"riskScore\": 11,\r\n    \"evaluationDate\": \"02-04-2090\",\r\n    \"validUntil\": \"20-03-2098\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/risks",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"risks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update risk",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"riskTypeCode\": \"01\",\r\n  \"riskScore\": 11,\r\n  \"evaluationDate\": \"02-04-2090\",\r\n  \"validUntil\": \"20-03-2098\",\r\n  \"partyRiskId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/risks/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"risks",
+								"01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all risks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/risks/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"risks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch risks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/risks/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"risks",
+								"01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Memo",
+			"item": [
+				{
+					"name": "Create memos",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"memoTypeCode\": \"01\",\r\n    \"severity\": \"S1\",\r\n    \"score\": 11,\r\n    \"validFrom\": \"03-11-1901\",\r\n    \"validTo\": \"02-11-1915\"\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:11699/party/1234578899/memos",
+							"host": [
+								"localhost"
+							],
+							"port": "11699",
+							"path": [
+								"party",
+								"1234578899",
+								"memos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update memo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"memoTypeCode\": \"01\",\r\n  \"severity\": \"S1\",\r\n  \"score\": 11,\r\n  \"validFrom\": \"03-11-1901\",\r\n  \"validTo\": \"02-11-1915\",\r\n  \"partyMemosId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/memos/01/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"memos",
+								"01",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all memos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/memos/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"memos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch memo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/memos/01",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"memos",
+								"01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dedupe",
+			"item": [
+				{
+					"name": "Dedupe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"countryCode\": \"01\",\r\n  \"fullName\": \"Joi Bristo Regino\",\r\n  \"mobileNumber\": \"9400000290\",\r\n  \"dateOfBirth\": \"30-11-1997\",\r\n  \"nationalIdTypeCode\": \"01\",\r\n  \"nationalId\": \"80033848\",\r\n  \"nationalityCode\": \"01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/dedupe",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"dedupe"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fatca",
+			"item": [
+				{
+					"name": "Create Fatca Details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n [\r\n        {\r\n            \"placeOfIncorporation\": \"Banglore\",\r\n            \"countryOfIncorporation\": \"India\",\r\n            \"countryOfResidence\": \"India\",\r\n            \"incorporationNumber\": \"1111\",\r\n            \"boardRelNumber\": \"2222\",\r\n            \"reportBlNumber\": \"3333\",\r\n            \"originalReportBlNumber\": \"4444\",\r\n            \"fatcaTaxId\": \"01\",\r\n            \"documentReferenceId\": \"01\"\r\n        }    \r\n    ]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/fatca",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"fatca"
+							]
+						},
+						"description": "Create Fatca Details"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fatca Details",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"placeOfIncorporation\": \"kolar\",\r\n    \"countryOfIncorporation\": \"India\",\r\n    \"countryOfResidence\": \"India\",\r\n    \"incorporationNumber\": \"9999\",\r\n    \"boardRelNumber\": \"2222\",\r\n    \"reportBlNumber\": \"3333\",\r\n    \"originalReportBlNumber\": \"4444\",\r\n    \"fatcaTaxId\": \"01\",\r\n    \"documentReferenceId\": \"02\"\r\n}    \r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/fatca/10/",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"fatca",
+								"10",
+								""
+							]
+						},
+						"description": "Update PartyFatca"
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch All Fatca Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/fatca",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"fatca"
+							]
+						},
+						"description": "Fetch All Fatca Details"
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Fatca Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/fatca/3",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"fatca",
+								"3"
+							]
+						},
+						"description": "Fetch Fatca Details"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Guardian",
+			"item": [
+				{
+					"name": "Create Guardian",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n      \"guardianFirstName\": \"Anh\",\r\n      \"guardianMiddleName\": \"Van\",\r\n      \"guardianLastName\": \"Duc\",\r\n      \"guardianRelation\": \"Father\",\r\n      \"guardianAddressLine1\": \"Da Nang\",\r\n      \"guardianAddressLine2\": \"House 14\",\r\n      \"guardianAddressLine3\": \"District 17\",\r\n      \"guardianWardCode\": \"01\",\r\n      \"guardianDistrictCode\": \"01\",\r\n      \"guardianCityCode\": \"01\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dev_url}}/1234578899/guardian",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"guardian"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Guardian",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dev_url}}/1234578899/guardian/03",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"1234578899",
+								"guardian",
+								"03"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+  "addressTypeCode": "HANOI 11618",
+  "isDefault": true,
+  "addressLine1": "93 Nguyen Thai Hoc Street",
+  "addressLine2": "Cau Ong Lanh Ward",
+  "addressLine3": "District 1",
+  "wardCode": "B1",
+  "districtCode": "D1",
+  "cityCode": "1",
+  "cityZipCode": 11618,
+  "countryCode": "84",
+  "documentId": "1"
+}

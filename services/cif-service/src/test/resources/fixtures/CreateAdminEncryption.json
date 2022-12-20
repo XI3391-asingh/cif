@@ -1,0 +1,24 @@
+{
+  "type": "ENCRYPTION",
+  "configData": [
+    {
+      "key": "FIELDS",
+      "values": [
+        "party.firstName",
+        "party.lastName",
+        "party.primaryEmail",
+        "party.middleName",
+        "party.fullName",
+        "party.primaryMobileNumber"
+      ]
+    },
+    {
+      "key": "ENCRYPTIONFLAG",
+      "values": [
+        "TRUE"
+
+      ]
+    }
+
+  ]
+}

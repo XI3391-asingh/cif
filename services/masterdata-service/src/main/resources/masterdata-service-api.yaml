@@ -1,51 +1,406 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Open API Specification for masterdata service
+  title: Open API Specification for Master Service
 paths:
   /masterdata:
-    get:
+    post:
       tags:
-        - masterdata
-      summary: List MasterData
-      operationId: masterdata
-      parameters:
-        - name: Accept-Language
-          in: header
-          schema:
-            type: string
-            default: ""
-        - name: entityName
-          in: query
-          description: Filter Options
-          required: true
-          schema:
-            type: string
+        - MasterData
+      summary: Create a masterdata
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Master'
       responses:
-        '200':
-          description: List Masterdata
+        '201':
+          description: Master Data Created Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseApi"
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Master Data Creation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /masterdata/update/{masterDataId}:
+    put:
+      tags:
+        - MasterData
+      summary: Masterdata Update
+      operationId: update
+      parameters:
+        - name: masterDataId
+          in: path
+          description: Master Data Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMasterDataRequestCmd'
+      responses:
+        '200':
+          description: Masterdata Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+
+  /masterdata/{masterDataType}:
+    get:
+      tags:
+        - MasterData
+      summary: Fetch Master Data
+      operationId: fetchMasterData
+      parameters:
+        - name: masterDataType
+          in: path
+          description: Master Data Type
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewMasterDataCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /masterdata/{masterDataId}/{masterDataType}:
+    delete:
+      tags:
+        - MasterData
+      summary: Delete Master Data
+      operationId: deleteMasterData
+      parameters:
+        - name: masterDataId
+          in: path
+          description: Master Data Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: masterDataType
+          in: path
+          description: Master Data Type
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Master Data Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Master Data Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /masterdata/countrymaster:
+    post:
+      tags:
+        - CountryMasterData
+      summary: Create a country master data
+      operationId: createCountryMasterData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountryMaster'
+      responses:
+        '201':
+          description: Country Master Data Created Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Master Data Creation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /masterdata/countrymaster/update/{countryMasterDataId}/:
+    put:
+      tags:
+        - CountryMasterData
+      summary: Country master data update
+      operationId: updateCountryMasterData
+      parameters:
+        - name: countryMasterDataId
+          in: path
+          description: Country Master Data Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCountryMasterCmd'
+      responses:
+        '200':
+          description: Country Master Data Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+
+  /masterdata/countrymaster/:
+    get:
+      tags:
+        - CountryMasterData
+      summary: Fetch Country Master Data
+      operationId: fetchCountryMasterData
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewCountryMasterDataCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /masterdata/countrymaster/{countryMasterDataId}:
+    delete:
+      tags:
+        - CountryMasterData
+      summary: Delete Country Master Data
+      operationId: deleteCountryMasterData
+      parameters:
+        - name: countryMasterDataId
+          in: path
+          description: Country Master Data Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Country Master Data Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Master Data Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
 components:
   schemas:
+    MasterCmd:
+      properties:
+        type:
+          type: string
+          example: "ADDRESS_TYPE"
+        code:
+          type: string
+          example: "01"
+        description:
+          type: string
+          example: "Permanent Address"
+        createdBy:
+          type: string
+    Master:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateMasterCmd'
+    CreateMasterCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MasterCmd'
+      properties:
+        dtType:
+          type: string
+          enum: [LOOKUP_MASTER, ADDRESS_MASTER]
+
+
+    UpdateMasterDataRequestCmd:
+      allOf:
+        - $ref: '#/components/schemas/MasterCmd'
+      properties:
+        dtType:
+          type: string
+          enum: [LOOKUP_MASTER, ADDRESS_MASTER]
+
+    ViewMasterDataCmd:
+      allOf:
+        - $ref: '#/components/schemas/MasterCmd'
+
+    CountryMasterCmd:
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        isdCode:
+          type: string
+        createdBy:
+          type: string
+    CountryMaster:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateCountryMasterCmd'
+    CreateCountryMasterCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CountryMasterCmd'
+    UpdateCountryMasterCmd:
+      allOf:
+        - $ref: '#/components/schemas/CountryMasterCmd'
+    ViewCountryMasterDataCmd:
+      allOf:
+        - $ref: '#/components/schemas/CountryMasterCmd'
+
+
     ResponseApi:
       type: object
       properties:
-        statusCode:
-          type: integer
-        success:
-          type: boolean
-        message:
-          type: string
-        data:
+        meta:
           type: object
-    Error:
+          properties:
+            requestId:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+
+    ErrorResponseApi:
       type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            errors:
+              type: array
+              items:
+                type: object
+
+    SuccessResponseApi:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ResponseApi'
+        - type: object
+          properties:
+            data:
+              type: object

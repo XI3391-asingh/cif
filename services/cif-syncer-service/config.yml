@@ -1,0 +1,79 @@
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 14893
+  adminConnectors:
+    - type: http
+      port: 11701
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/syncerservicedb}
+  user: ${POSTGRES_USER:- }
+  password: ${POSTGRES_PASSWORD:- }
+
+kafka:
+  threadPoolSize: 20
+
+consumer:
+  type: basic
+  name: ${CONSUMER_NAME:- cif_consumer}
+  topics: ${CONSUMER_TOPICS:-
+    - cif_topic
+    }
+  bootstrapServers: ${CONSUMER_BOOTSTRAP_SERVER:- localhost:9092}
+  consumerGroupId: ${CONSUMER_GROUP_ID:- cif_consumer_group}
+  keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  autoOffsetReset: earliest
+  autoCommitEnabled: false
+# security:
+#   enabled: ${SECURITY_PROTOCOL:- false}
+#   securityProtocol: ${SECURITY_PROTOCOL:- }
+#   sslProtocol: ${SSL_PROTOCOL:- }
+#   saslMechanism: ${SASL_MECHANISM:- }
+#   saslJaas: ${SASL_JAAS:- }
+
+producer:
+  type: basic
+  name: ${PRODUCER_NAME:- syncer_producer}
+  topics: ${PRODUCER_TOPICS:-
+    - cif_topic-ack
+    }
+  bootstrapServers: ${PRODUCER_BOOTSTRAP_SERVER:- localhost:9092 }
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.cif.syncerservice.core.syncer.dto.PartySerializer
+  acks: ${ACKS:- all}
+  retries: ${RETRIES:- 5}
+  maxInFlightRequestsPerConnection: 1
+# security:
+#   enabled: ${SECURITY_PROTOCOL:- false}
+#   securityProtocol: ${SECURITY_PROTOCOL:- }
+#   sslProtocol: ${SSL_PROTOCOL:- }
+#   saslMechanism: ${SASL_MECHANISM:- }
+#   saslJaas: ${SASL_JAAS:- }
+
+quartz:
+  org.quartz.scheduler.instanceName: "scheduler"
+  org.quartz.scheduler.instanceId: "AUTO"
+  org.quartz.scheduler.skipUpdateCheck: "true"
+  org.quartz.threadPool.class: "org.quartz.simpl.SimpleThreadPool"
+  org.quartz.threadPool.threadCount: "2"
+  org.quartz.threadPool.threadPriority: "5"
+  org.quartz.jobStore.misfireThreshold: "6000000"
+  org.quartz.jobStore.class: "org.quartz.impl.jdbcjobstore.JobStoreTX"
+  org.quartz.jobStore.driverDelegateClass: "org.quartz.impl.jdbcjobstore.PostgreSQLDelegate"
+  org.quartz.jobStore.useProperties: "false"
+  org.quartz.jobStore.dataSource: "myDS"
+  org.quartz.jobStore.tablePrefix: "QRTZ_"
+  org.quartz.jobStore.isClustered: "true"
+  org.quartz.dataSource.myDS.driver: "org.postgresql.Driver"
+  org.quartz.dataSource.myDS.URL: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/syncerservicedb}
+  org.quartz.dataSource.myDS.user: ${POSTGRES_USER:- }
+  org.quartz.dataSource.myDS.password: ${POSTGRES_PASSWORD:- }
+  org.quartz.dataSource.myDS.maxConnections: "5"
+  org.quartz.dataSource.myDS.validationQuery: "select 1"

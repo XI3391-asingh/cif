@@ -1,0 +1,52 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open API Specification for {{cookiecutter.service_name}}
+paths:
+  /{{ cookiecutter.entity.lower() + 's' }}:
+    post:
+      summary: Create a {{cookiecutter.entity.lower()}} entry
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Create{{ cookiecutter.entity }}Cmd'
+      responses:
+        '201':
+          description: Created a {{cookiecutter.entity.lower()}} item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Create{{ cookiecutter.entity }}Response'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Create{{ cookiecutter.entity }}Cmd:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Create{{ cookiecutter.entity }}Response:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

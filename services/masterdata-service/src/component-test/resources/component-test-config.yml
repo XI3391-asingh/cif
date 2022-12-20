@@ -1,3 +1,6 @@
+database:
+  driverClass: org.postgresql.Driver
+
 server:
   applicationConnectors:
     - type: http
@@ -9,4 +12,4 @@ server:
 logging:
   level: INFO
   loggers:
-    com.finx: DEBUG
+    com.masterdata: DEBUG

@@ -1,0 +1,152 @@
+{
+  "party": {
+    "type": "CUSTOMER",
+    "salutationCode": "01",
+    "fullName": "Joi Bristo Regino",
+    "firstName": "Joi",
+    "middleName": "Bristo",
+    "lastName": "Regino",
+    "mothersMaidenName": "Mia",
+    "nickName": "Jo",
+    "gender": "MALE",
+    "dateOfBirth": "30-11-1997",
+    "placeOfBirth": "Da Nang",
+    "primaryMobileNumber": "9088563701",
+    "primaryEmail": "joibristo434@gmail.com",
+    "maritalStatus": "SINGLE",
+    "status": "ACTIVE",
+    "nationalIdTypeCode": "01",
+    "nationalId": "80033848",
+    "referralCode": "RC01",
+    "promoCode": "T01",
+    "relationTypeCode": "01",
+    "segmentCode": "11",
+    "countryOfBirthCode": "01",
+    "nationalityCode": "01",
+    "educationTypeCode": "01",
+    "isStaff": true,
+    "staffCode": "S22",
+    "groupCode": "G21",
+    "portfolioCode": "PP12",
+    "countryOfResidenceCode": "01",
+    "residencyTypeCode": "01",
+    "jobPositionTypeCode": "02",
+    "amlRisk": "MEDIUM",
+    "amlRiskEvalDate": "20-11-2003",
+    "amlCheckStatus": false,
+    "createdByChannel": "Web"
+  },
+  "occupationDetail": {
+    "professionCode": "01",
+    "professionTypeCode": "01",
+    "industryTypeCode": "11",
+    "companyTypeCode": "CG09",
+    "annualIncome": 91019,
+    "annualTurnover": 877887,
+    "taxId": "TX01",
+    "dateOfInCorporation": "05-10-1980"
+  },
+  "address": [
+    {
+      "addressTypeCode": "01",
+      "isDefault": true,
+      "addressLine1": "14/12 Ky Dong Street",
+      "addressLine2": "Ward 3, District 17",
+      "addressLine3": "HCMC",
+      "wardCode": "01",
+      "districtCode": "D01",
+      "cityCode": "11",
+      "cityZipCode": 11001,
+      "countryCode": "84",
+      "documentId": "01"
+    }
+  ],
+  "contactDetails": [
+    {
+      "contactTypeCode": "01",
+      "contactValue": "9918831234",
+      "isdCode": "84",
+      "isPrimary": true,
+      "isVerified": true,
+      "verifiedMode": "verified",
+      "lastVerifiedDate": "30-08-1982",
+      "isDnd": true
+    }
+  ],
+  "assets": [
+    {
+      "assetTypeCode": "01",
+      "assetName": "house",
+      "potentialValue": 99999999,
+      "isMortgaged": true
+    }
+  ],
+  "memos": [
+    {
+      "memoTypeCode": "01",
+      "severity": "S1",
+      "score": 11,
+      "validFrom": "03-11-1901",
+      "validTo": "02-11-1915"
+    }
+  ],
+  "risks": [
+    {
+      "riskTypeCode": "01",
+      "riskScore": 11,
+      "evaluationDate": "02-04-2090",
+      "validUntil": "20-03-2098"
+    }
+  ],
+  "fatcaDetails": [
+    {
+      "placeOfIncorporation": "Da Nang",
+      "countryOfIncorporation": "Vietnam",
+      "countryOfResidence": "Vietnam",
+      "incorporationNumber": "01",
+      "boardRelNumber": "BR01",
+      "reportBlNumber": "R01",
+      "originalReportBlNumber": "OR1",
+      "fatcaTaxId": "01",
+      "documentReferenceId": "11"
+    }
+  ],
+  "guardians": [
+    {
+      "guardianFirstName": "Anh",
+      "guardianMiddleName": "Van",
+      "guardianLastName": "Duc",
+      "guardianRelation": "Father",
+      "guardianAddressLine1": "Da Nang",
+      "guardianAddressLine2": "House 14",
+      "guardianAddressLine3": "District 17",
+      "guardianWardCode": "01",
+      "guardianDistrictCode": "11"
+    }
+  ],
+  "relations": [
+    {
+      "secondaryPartyId": "02",
+      "partyRelationTypeCode": "01",
+      "invRelation": "Y"
+    }
+  ],
+  "documents": [
+    {
+      "documentTypeCode": "01",
+      "documentNumber": "11",
+      "documentNumberMasked": "01",
+      "documentNumberToken": "02",
+      "issuingDate": "14-05-1972",
+      "expiryDate": "24-05-1979",
+      "issuingPlace": "Dong Nai",
+      "issuingCountryCode": "84",
+      "issuingCountry": "vietnam",
+      "isPoi": true,
+      "isPoa": true,
+      "dmsReferenceId": "01",
+      "verificationStatus": "verified",
+      "additionalData": "Y"
+    }
+  ]
+}

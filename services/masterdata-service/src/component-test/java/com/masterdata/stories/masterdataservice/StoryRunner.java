@@ -1,0 +1,109 @@
+package com.masterdata.stories.masterdataservice;
+
+import com.masterdata.masterdataservice.MasterDataServiceApplication;
+import com.masterdata.masterdataservice.MasterDataServiceConfiguration;
+import io.dropwizard.client.JerseyClientBuilder;
+import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.DropwizardTestSupport;
+import io.dropwizard.testing.ResourceHelpers;
+import org.glassfish.jersey.client.ClientProperties;
+import org.jbehave.core.configuration.Configuration;
+import org.jbehave.core.configuration.MostUsefulConfiguration;
+import org.jbehave.core.embedder.Embedder;
+import org.jbehave.core.io.LoadFromClasspath;
+import org.jbehave.core.junit.JUnit4StoryRunner;
+import org.jbehave.core.junit.JUnitStories;
+import org.jbehave.core.reporters.StoryReporterBuilder;
+import org.jbehave.core.steps.InjectableStepsFactory;
+import org.jbehave.core.steps.InstanceStepsFactory;
+import org.junit.runner.RunWith;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
+
+import javax.ws.rs.client.Client;
+import java.util.List;
+
+import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
+import static org.jbehave.core.reporters.Format.*;
+
+
+@RunWith(JUnit4StoryRunner.class)
+public class StoryRunner extends JUnitStories {
+
+    public static final DropwizardTestSupport<MasterDataServiceConfiguration> SUPPORT;
+    public static final Client CLIENT;
+    private static final String CONFIG = "component-test-config.yml";
+    private static final PostgreSQLContainer<?> POSTGRES_CONTAINER;
+
+    static {
+        POSTGRES_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13.3"));
+        POSTGRES_CONTAINER.start();
+        SUPPORT =
+                new DropwizardTestSupport<>(MasterDataServiceApplication.class,
+                        ResourceHelpers.resourceFilePath(CONFIG),
+                        ConfigOverride.config("server.applicationConnectors[0].port", "0"),
+                        ConfigOverride.config("database.url", POSTGRES_CONTAINER::getJdbcUrl),
+                        ConfigOverride.config("database.user", POSTGRES_CONTAINER::getUsername),
+                        ConfigOverride.config("database.password", POSTGRES_CONTAINER::getPassword),
+                        ConfigOverride.config("database.properties.enabledTLSProtocols", "TLSv1.1,TLSv1.2,TLSv1.3"));
+
+        try {
+            SUPPORT.before();
+            SUPPORT.getApplication().run("db", "migrate", ResourceHelpers.resourceFilePath(CONFIG));
+            CLIENT = new JerseyClientBuilder(SUPPORT.getEnvironment())
+                    .withProperty(ClientProperties.READ_TIMEOUT, 0)
+                    .build("test client");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to start", e);
+        }
+    }
+
+    public StoryRunner() {
+        Embedder embedder = configuredEmbedder();
+        embedder.embedderControls()
+                .doVerboseFailures(true)
+                .useStoryTimeouts("10000");
+    }
+
+    @Override
+    public Configuration configuration() {
+        return new MostUsefulConfiguration()
+                .useStoryLoader(new LoadFromClasspath(this.getClass()))
+                .useStoryReporterBuilder(new StoryReporterBuilder()
+                        .withDefaultFormats()
+                        .withCodeLocation(codeLocationFromClass(this.getClass()))
+                        .withFormats(CONSOLE, HTML, TXT));
+    }
+
+    protected Client getClient() {
+        return CLIENT;
+    }
+
+    protected int getLocalPort() {
+        return SUPPORT.getLocalPort();
+    }
+
+    @Override
+    public InjectableStepsFactory stepsFactory() {
+        return new InstanceStepsFactory(configuration(), setStepsFactory());
+    }
+
+    @Override
+    public List<String> storyPaths() {
+        return setStoryPath();
+    }
+
+    private List<String> setStoryPath() {
+        return List.of("stories/01/step1_create_master_data.story", "stories/01/step2_update_master_data.story",
+                "stories/01/step3_fetch_master_data.story", "stories/01/step4_delete_master_data.story",
+                "stories/02/step1_create_country_master_data.story", "stories/02/step2_update_country_master_data.story",
+                "stories/02/step3_fetch_country_master_data.story", "stories/02/step4_delete_country_master_data.story");
+    }
+
+    private List<Object> setStepsFactory() {
+        return List.of(new CreateMasterDataSteps(getClient(), getLocalPort()), new UpdateMasterDataSteps(getClient(), getLocalPort()),
+                new FetchMasterDataSteps(getClient(), getLocalPort()), new DeleteMasterDataSteps(getClient(), getLocalPort()),
+                new CreateCountryMasterDataSteps(getClient(), getLocalPort()), new UpdateCountryMasterDataSteps(getClient(), getLocalPort()),
+                new FetchCountryMasterDataSteps(getClient(), getLocalPort()), new DeleteCountryMasterDataSteps(getClient(), getLocalPort()));
+    }
+}

@@ -1,4 +1,4 @@
-rootProject.name='finx-ms'
+rootProject.name='cif-ms'
 
 def projectDirs = [
         'shared',

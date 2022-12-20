@@ -10,13 +10,13 @@ plugins {
     id "org.openapi.generator" version "6.0.0"
 }
 
-group = 'com.finx.masterdataservice'
+group = 'com.masterdata.masterdataservice'
 version = '1.0-SNAPSHOT'
-description = 'This is service for storing and getting master data.'
+description = 'This Microservices will contain all api related to master data .'
 
 project.ext {
     dropwizardVersion = '2.1.0'
-    mainClass = 'com.finx.masterdataservice.MasterdataServiceApplication'
+    mainClass = 'com.masterdata.masterdataservice.MasterDataServiceApplication'
     junitVersion = "5.8.2"
     testContainersVersion = "1.16.3"
 }
@@ -48,7 +48,7 @@ configurations {
 }
 
 task componentTest(type: Test) {
-    useJUnitPlatform()
+
     testLogging {
         events("passed", "failed", "skipped")
     }
@@ -89,10 +89,11 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api'
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'io.dropwizard:dropwizard-jdbi3'
-    implementation 'io.dropwizard:dropwizard-migrations'
     implementation 'org.jdbi:jdbi3-postgres'
     implementation 'org.jdbi:jdbi3-jackson2'
+    implementation 'io.dropwizard:dropwizard-migrations'
     runtimeOnly 'org.postgresql:postgresql:42.3.6'
+    implementation 'org.testcontainers:postgresql:1.16.3'
     implementation 'io.swagger:swagger-annotations:1.6.6'
 
     testImplementation("io.dropwizard:dropwizard-testing") {
@@ -103,7 +104,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.assertj:assertj-core")
-    testImplementation("org.jdbi:jdbi3-testing")
     componentTestImplementation("org.postgresql:postgresql:42.3.6")
     componentTestImplementation("org.testcontainers:junit-jupiter")
     componentTestImplementation("org.testcontainers:postgresql")
@@ -151,7 +151,7 @@ build.finalizedBy shadowJar
 sonarqube {
     properties {
         property "sonar.coverage.exclusions",
-                "**/**"
+                ""
     }
 }
 
@@ -161,7 +161,7 @@ abstract class ServiceJarSizeTask extends DefaultTask {
         def jarPath = project.buildDir.absolutePath + "/libs/${project.rootProject.name}-${project.version}-all.jar"
         def jarFile = project.file(jarPath)
         def jarSizeInMbs = (jarFile.length() / (1024 * 1024)).round(2)
-        def maxJarSizeInMbs = 40
+        def maxJarSizeInMbs = 50
         if (jarSizeInMbs > maxJarSizeInMbs) {
             throw new GradleException("Service executable JAR size is $jarSizeInMbs Mb. The max allowed JAR size is $maxJarSizeInMbs Mb")
         } else {
@@ -178,8 +178,8 @@ task buildApiServer(type: org.openapitools.generator.gradle.plugin.tasks.Generat
     generatorName = "jaxrs-spec"
     inputSpec = "$rootDir/src/main/resources/masterdata-service-api.yaml".toString()
     outputDir = "$buildDir/generated".toString()
-    apiPackage = "com.finx.masterdataservice.api"
-    modelPackage = "com.finx.masterdataservice.api"
+    apiPackage = "com.masterdata.masterdataservice.api"
+    modelPackage = "com.masterdata.masterdataservice.api"
     configOptions = [
             java8            : "true",
             dateLibrary      : "java8",

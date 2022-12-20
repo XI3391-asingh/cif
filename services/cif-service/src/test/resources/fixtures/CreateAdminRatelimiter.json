@@ -1,0 +1,29 @@
+{
+  "type": "RATELIMITER",
+  "configData": [
+    {
+      "key": "RESTRICTION",
+      "values": [
+        "2"
+      ]
+    },
+    {
+      "key": "TIMEVALUE",
+      "values": [
+        "1"
+      ]
+    },
+    {
+      "key": "TIMEUNIT",
+      "values": [
+        "MINUTES"
+      ]
+    },
+    {
+      "key": "RATELIMITERFLAG",
+      "values": [
+        "TRUE"
+      ]
+    }
+  ]
+}

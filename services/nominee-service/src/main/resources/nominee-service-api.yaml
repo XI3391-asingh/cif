@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Open API Specification for nominee-service
+paths:
+  /nominee/:
+    post:
+      tags:
+        - Nominees
+      summary: Create Party Nominee
+      operationId: createNominee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NomineeRequest'
+                - type: object
+                  required:
+                    - partyId
+                    - salutation
+                    - firstName
+                    - lastName
+                    - relation
+                    - nationalId
+      responses:
+        '201':
+          description: Nominee Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/NomineeResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+    put:
+      tags:
+        - Nominees
+      summary: Update  Nominee
+      operationId: updateNominee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NomineeRequest'
+                - type: object
+                  required:
+                    - nomineeId
+      responses:
+        '200':
+          description: Nominee Update Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/NomineeResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+  '/nominee/{nomineeId}':
+    delete:
+      tags:
+        - Nominees
+      summary: Delete  Nominee
+      operationId: deleteNominee
+      parameters:
+        - name: nomineeId
+          in: path
+          description: Nominee Id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Nominee Delete Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+  '/nominee/fetch/':
+    post:
+      tags:
+        - Nominees
+      summary: Fetch Nominee
+      operationId: fetchNominee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchNomineeRequest'
+      responses:
+        '200':
+          description: Nominee Update Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/NomineeFetchResponse'
+        '204':
+          description: Fetch Nominee Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+
+  /nominee/mapping:
+    post:
+      tags:
+        - Nominee Mapping
+      summary: Create Nominee Mapping
+      operationId: createNomineeMapping
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NomineeMappingRequest'
+
+      responses:
+        '201':
+          description: Nominee Mapping Create Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponseApi"
+
+        '400':
+          description: Nominee Mapping Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+
+  /nominee/mapping/{nomineeMappingId}:
+    delete:
+      tags:
+        - Nominee Mapping
+      summary: Delete  Nominee Mapping
+      operationId: deleteNomineeMapping
+      parameters:
+        - name: nomineeMappingId
+          in: path
+          description: Nominee Mapping Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Nominee Mapping Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Nominee Mapping Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseApi'
+
+components:
+  schemas:
+    NomineeRequest:
+      properties:
+        partyId:
+          type: integer
+          format: int32
+          minimum: 1
+        nomineeId:
+          type: integer
+          format: int32
+        salutation:
+          type: string
+          enum: [Mr., Ms., Dr.]
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        relation:
+          type: string
+          enum: [ FATHER, MOTHER, SPOUSE, SISTER, BROTHER ]
+          example: "FATHER"
+        nationalId:
+          type: string
+    FetchNomineeRequest:
+      properties:
+        partyId:
+          type: integer
+          format: int32
+        nomineeId:
+          type: integer
+          format: int32
+    NomineeResponse:
+      properties:
+        partyId:
+          type: integer
+          format: int32
+        nomineeId:
+          type: integer
+          format: int32
+        salutation:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        relation:
+          type: string
+        nationalId:
+          type: string
+    NomineeFetchResponse:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/NomineeResponse'
+
+    NomineeMappingRequest:
+      properties:
+        partyId:
+          type: integer
+          format: int32
+        nomineeId:
+          type: integer
+          format: int32
+        accountNumber:
+          type: string
+
+    ResponseApi:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    SuccessResponseApi:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ResponseApi'
+        - type: object
+          properties:
+            data:
+              type: object
+
+

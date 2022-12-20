@@ -1,0 +1,56 @@
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/cifservicedb}
+  user: ${POSTGRES_USER:-postgres}
+  password: ${POSTGRES_PASSWORD:-postgres}
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+    com.finx: DEBUG
+
+producer:
+  type: basic
+  topic: cif_topic
+  bootstrapServers: 127.0.0.1:9092
+  name: producerNameToBeUsedInMetrics
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.cif.cifservice.core.party.util.DataSerializer
+  acks: all
+  retries: 3
+  maxInFlightRequestsPerConnection: 1
+
+elasticsearch:
+  host: http://localhost
+  port: 9200
+  party_index: party_v1
+  activity_posting_index: activity_posting
+
+swagger:
+  resourcePackage: com.cif.cifservice.resources
+
+universalSearchFields:
+  text:
+    - party.firstName
+    - party.lastName
+    - party.fullName
+  number:
+    - party.primaryMobileNumber
+    - party.dateOfBirth
+    - party.nationalId
+    - party.referralCode
+  email:
+    - party.primaryEmail
+  date:
+    - party.dateOfBirth
+  specialChar:
+    - party.dateOfBirth
+

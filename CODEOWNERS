@@ -6,14 +6,14 @@
 # The '*' pattern is global owners.
 
 # DevEx team Ownership
-.* @GalaxyFinX/devex
-/templates/** @GalaxyFinX/devex
-/tools/** @GalaxyFinX/devex
-/local/** @GalaxyFinX/devex
+.* @x-finx/devex
+/templates/** @x-finx/devex
+/tools/** @x-finx/devex
+/local/** @x-finx/devex
 
 # Stream aligned Teams Ownership
-/services/** @GalaxyFinX/ms
-/shared/** @GalaxyFinX/ms
+/services/** @x-finx/ms
+/shared/** @x-finx/ms
 
 # Platform Team Ownership
-/services/*/platform/** @GalaxyFinX/platform
+/services/*/platform/** @x-finx/platform

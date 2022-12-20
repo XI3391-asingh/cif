@@ -1,17 +1,17 @@
 logging:
   level: INFO
   loggers:
-    com.finx: DEBUG
+    com.cif: DEBUG
 server:
   applicationConnectors:
     - type: http
-      port: 10885
+      port: 10917
   adminConnectors:
     - type: http
-      port: 10886
+      port: 10918
 
 database:
   driverClass: org.postgresql.Driver
-  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/masterdataservicedb}
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/cif}
   user: ${POSTGRES_USER}
   password: ${POSTGRES_PASSWORD}

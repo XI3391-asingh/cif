@@ -1,6 +1,6 @@
 version: "3.8"
 networks:
-  fxnwk:
+  cifnwk:
     name: app
     driver: bridge
 volumes:
@@ -12,19 +12,19 @@ volumes:
 services:
   db:
     image: postgres:13.3
-    container_name: fxdb
+    container_name: cifdb
     restart: always
     volumes:
       - ./db:/docker-entrypoint-initdb.d
     networks:
-      - fxnwk
+      - cifnwk
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_MULTIPLE_DATABASES: |-
-        sampledb,sonardb
+        sonardb
       PGDATA: /var/lib/postgresql/data/pgdata
     healthcheck:
       test: pg_isready -U postgres
@@ -32,10 +32,10 @@ services:
       timeout: 10s
       retries: 2
   pgadmin:
-    container_name: fxpgadmin
+    container_name: cifpgadmin
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pg@finx.com}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pg@cif.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
       POSTGRES_PASSWORD: postgres
@@ -45,12 +45,12 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      - fxnwk
+      - cifnwk
     restart: unless-stopped
-    profiles: ["full"]
+    profiles: [ "full" ]
   redis:
     image: redis:6.2
-    container_name: fxredis
+    container_name: cifredis
     restart: always
     ports:
       - "6379:6379"
@@ -61,8 +61,8 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
-      - fxnwk
-    profiles: ["kafka", "full"]
+      - cifnwk
+    profiles: [ "kafka", "full" ]
   kafka:
     image: "bitnami/kafka:2"
     ports:
@@ -75,8 +75,8 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - fxnwk
-    profiles: ["kafka", "full"]
+      - cifnwk
+    profiles: [ "kafka", "full" ]
   sonarqube:
     image: sonarqube:community
     depends_on:
@@ -86,11 +86,11 @@ services:
       SONAR_JDBC_USERNAME: postgres
       SONAR_JDBC_PASSWORD: postgres
     networks:
-      - fxnwk
+      - cifnwk
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
     ports:
       - "9000:9000"
-    profiles: ["full"]
+    profiles: [ "full" ]

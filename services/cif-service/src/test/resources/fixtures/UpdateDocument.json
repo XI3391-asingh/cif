@@ -1,0 +1,17 @@
+{
+  "documentTypeCode": "A2",
+  "documentNumber": "22",
+  "documentNumberMasked": "2121",
+  "documentNumberToken": "12",
+  "issuingDate": "03-07-1980",
+  "expiryDate": "22-03-1999",
+  "issuingPlace": "Dong Nai",
+  "issuingCountryCode": "84",
+  "issuingCountry": "Vietnam",
+  "isPoi": true,
+  "isPoa": true,
+  "dmsReferenceId": "111",
+  "verificationStatus": "V2",
+  "additionalData": "Y",
+  "partyDocumentId": 1
+}

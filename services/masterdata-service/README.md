@@ -39,12 +39,12 @@ Start the application by running following command
 java -jar build/libs/masterdata-service-1.0-SNAPSHOT-all.jar server config.yml
 ```
 
-To check that your application is running enter url `http://localhost:10885`
+To check that your application is running enter url `http://localhost:10917`
 
 You run the following http command to test the API endpoint. Make sure to install [HTTPie](https://httpie.io/cli)
 
 ```
-http :10885/masterdatas name=Dummy
+http :10917/masterdatas name=Dummy
 ```
 
 Response
@@ -67,16 +67,16 @@ Date: Fri, 10 Jun 2022 08:11:06 GMT
 ## Health Check
 
 
-To see your application's health enter url `http://localhost:10886/healthcheck`
+To see your application's health enter url `http://localhost:10918/healthcheck`
 
 ## Docker image
 
 ```
-docker build -t com.finx/masterdata-service .
+docker build -t com.cif/masterdata-service .
 ```
 
 Run the docker image
 
 ```
-docker run -p 10885:10885 com.finx/masterdata-service
+docker run -p 10917:10917 com.cif/masterdata-service
 ```
