@@ -1,0 +1,17 @@
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 10917
+  adminConnectors:
+    - type: http
+      port: 10918
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/cif}
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}

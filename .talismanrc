@@ -1,0 +1,25 @@
+fileignoreconfig:
+- filename: services/onboarding-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/onboarding-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: services/onboarding-service/src/componentTest/java/com/finx/onboardingservice/ct/AbstractComponentTest.java
+  checksum: 6724ec40af5ef1273138d98f11e869adbcaa8f515b8a66272f43c49b50622298
+- filename: services/onboarding-service/src/componentTest/java/com/finx/onboardingservice/stories/CreateOnboardingWorkflowStoryTest.java
+  checksum: 4d936004cfa663f4b3fd852c4568997af7973ee9953effb47fdb5ab40e5d2647
+- filename: services/customer-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/customer-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: templates/ms-template/{{cookiecutter.service_slug}}/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]
+- filename: templates/ms-template/{{cookiecutter.service_slug}}/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/sample-service/config.yml
+  allowed_patterns:
+  - password:\ \$\{POSTGRES_PASSWORD\}
+- filename: services/sample-service/src/main/resources/migrations.xml
+  allowed_patterns: [primaryKey]

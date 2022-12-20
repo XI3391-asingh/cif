@@ -1,0 +1,17 @@
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+server:
+  applicationConnectors:
+    - type: http
+      port: 12525
+  adminConnectors:
+    - type: http
+      port: 12526
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://:5432/?currentSchema=}
+  user: ${POSTGRES_USER:- postgres}
+  password: ${POSTGRES_PASSWORD:- }

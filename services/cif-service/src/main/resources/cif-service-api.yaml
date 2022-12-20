@@ -1,0 +1,3230 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Customer Information File(CIF) - OpenAPI 3.0
+  description: |-
+    CIF are typically a central component of an integrated banking application package and are primarily used to support operational activities. With the advancement in technology have made maintaining customer information an easy task for the banks. There is no need to maintain physical records as they can be stored in electronic form.
+
+    <b>Some useful links:</b>
+    - [The CIF repository](https://github.com/x-finx/cif/tree/develop/services/cif-service)
+    - [The source API definition for the CIF](https://github.com/x-finx/cif/blob/develop/services/cif-service/src/main/resources/cif-service-api.yaml)
+    - [Postman collection](https://github.com/x-finx/cif/blob/develop/services/cif-service/postman-collection/CIF.postman_collection.json)
+    - [More about CIF](https://github.com/x-finx/cif/tree/develop)
+
+tags:
+  - name: Party
+    description: Everything about party details
+    externalDocs:
+      description: Find out more
+      url: https://github.com/x-finx/cif/tree/develop
+  - name: Address
+    description: Everything about address address details
+  - name: Contacts
+    description: Everything about contacts  details
+  - name: Document
+    description: Everything about document details
+  - name: Risks
+    description: Everything about risks details
+  - name: Fatca
+    description: Everything about risks details
+  - name: Memos
+    description: Everything about memos details
+  - name: Dedupe
+    description: Everything about dedupe details
+  - name: Guardian
+    description: Everything about guardian details
+
+paths:
+  /party:
+    post:
+      tags:
+        - Party
+      summary: Create Party
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyRequestCmd'
+      responses:
+        '201':
+          description: Party Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PartyResponseCmd'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+    get:
+      tags:
+        - Party
+      summary: Finds party details by party ids
+      description: Multiple ids values can be provided with comma separated strings
+      operationId: fetchPartyDetailByIdentifier
+      parameters:
+        - name: id
+          in: query
+          description: Identifier values that need to be considered for filter
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              default: available
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/components/schemas/SuccessResponseApi"
+                    - type: object
+                      properties:
+                        data:
+                          $ref: '#/components/schemas/PartyResponseCmd'
+        '400':
+          description: Invalid ids value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/search:
+    post:
+      tags:
+        - Party
+      summary: search
+      operationId: search
+      parameters:
+        - name: limit
+          in: query
+          description: The maximum number of items that may be returned for a single
+            request. i.e pagesize
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: The starting point within the collection of resource results.
+          required: false
+          schema:
+            type: integer
+        - name: sortingOrder
+          in: query
+          description: The starting point within the collection of resource results.
+          required: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+        - name: isDelete
+          in: query
+          description: Flag to determine whether search should contain record marked as deleted record or not
+          required: true
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+            default: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyDistinctiveSearchCmd'
+      responses:
+        '200':
+          description: Search success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PartySearchResponseCmd'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+  /party/advance-search:
+    post:
+      tags:
+        - Party
+      summary: search
+      operationId: advanceSearch
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdvanceSearchRequestCmd'
+      responses:
+        '200':
+          description: Search success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PartyResponseCmd'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/update:
+    put:
+      tags:
+        - Party
+      summary: Generic Update
+      operationId: update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartyRequestCmd'
+      responses:
+        '200':
+          description: Party Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+  /party/update/email:
+    put:
+      tags:
+        - Party
+      summary: Primary email update
+      operationId: updateEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyEmailUpdateCmd'
+      responses:
+        '200':
+          description: Primary email update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/update/mobilenumber:
+    put:
+      tags:
+        - Party
+      summary: Primary mobile number update
+      operationId: updateMobileNumber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyMobileUpdateCmd'
+      responses:
+        '200':
+          description: Party Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/update/status:
+    put:
+      tags:
+        - Party
+      summary: Status update
+      operationId: updateStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyStatusUpdateCmd'
+      responses:
+        '200':
+          description: Party Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/soft-delete/:
+    put:
+      tags:
+        - Party
+      summary: Update Party Record For Soft Delete
+      operationId: updatePartyRecordForSoftDelete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - partyIdentifier
+              properties:
+                partyIdentifier:
+                  type: string
+                  default: "1234567890"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/address:
+    post:
+      tags:
+        - Address
+      summary: Create Party Address
+      operationId: createAddress
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+
+      responses:
+        '201':
+          description: Party Address Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data :
+                        $ref: '#/components/schemas/ViewAddress'
+        '400':
+          description: Party Address Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/address/{partyAddressId}:
+    put:
+      tags:
+        - Address
+      summary: Update Party Address
+      operationId: updateAddress
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyAddressId
+          in: path
+          description: Party Address Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAddressCmd'
+      responses:
+        '200':
+          description: Party Address Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Address Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/address/:
+    get:
+      tags:
+        - Address
+      summary: fetch all Address deatils
+      operationId: fetchAllAddress
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewAddress'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+  /party/{partyIdentifier}/address/{partyAddressId}/:
+    get:
+      tags:
+        - Address
+      summary: Fetch address
+      operationId: fetchAddress
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: partyIdentifier
+          required: true
+          schema:
+            type: string
+        - name: partyAddressId
+          in: path
+          description: Party Address Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewAddressCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/address/{partyAddressIdentifier}:
+    delete:
+      tags:
+        - Address
+      summary: Delete Party Address
+      operationId: deleteAddress
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyAddressIdentifier
+          in: path
+          description: Party Address Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Address Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Address Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+  /party/{partyIdentifier}/contacts:
+    post:
+      tags:
+        - Contacts
+      summary: Create Contacts
+      operationId: createContacts
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDetails'
+      responses:
+        '201':
+          description: Party Contact Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewContactDetails'
+        '400':
+          description: Party Contact Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/contacts/{partyContactDetailsId}/:
+    put:
+      tags:
+        - Contacts
+      summary: Update Contacts
+      operationId: updateContacts
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyContactDetailsId
+          in: path
+          description: Party Contact Details Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactDetailsCmd'
+      responses:
+        '200':
+          description: Party Contact Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Contact Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/contacts/{partyContactDetailsId}:
+    get:
+      tags:
+        - Contacts
+      summary: Fetch Contact
+      operationId: fetchContact
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyContactDetailsId
+          in: path
+          description: Party Contact Details Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewContactDetailsCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/contacts/:
+    get:
+      tags:
+        - Contacts
+      summary: Fetch All Contacts
+      operationId: fetchAllContacts
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewContactDetails'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/contact/{contactIdentifier}:
+    delete:
+      tags:
+        - Contacts
+      summary: Delete Contacts
+      operationId: deleteContacts
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: contactIdentifier
+          in: path
+          description: Party Contact Details Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Party Contact Delete Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Contact Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/documents:
+    post:
+      tags:
+        - Document
+      summary: Create Party Document
+      operationId: createDocument
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Documents'
+      responses:
+        '201':
+          description: Party Document Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewDocuments'
+        '400':
+          description: Party Document Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/documents/{partyDocumentId}/:
+    put:
+      tags:
+        - Document
+      summary: Update Party Documents
+      operationId: updateDocuments
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyDocumentId
+          in: path
+          description: Party Document Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDocumentsCmd'
+      responses:
+        '200':
+          description: Party Document Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Document Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/documents/:
+    get:
+      tags:
+        - Document
+      summary: Fetch Party Documents
+      operationId: fetchAllDocuments
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewDocuments'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/documents/{partyDocumentId}:
+    get:
+      tags:
+        - Document
+      summary: Fetch Party Document
+      operationId: fetchDocument
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyDocumentId
+          in: path
+          description: Party Document Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewDocumentsCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/document/{documentId}:
+    delete:
+      tags:
+        - Document
+      summary: Delete Party Documents
+      operationId: deleteDocuments
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: documentId
+          in: path
+          description: Party Document Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Party Document Delete Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Document Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/risks:
+    post:
+      tags:
+        - Risks
+      summary: Create Party Risks
+      operationId: createRisks
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Risks'
+      responses:
+        '201':
+          description: Party Risk Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewRisks'
+        '400':
+          description: Party Risks Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/risks/{partyRiskId}/:
+    put:
+      tags:
+        - Risks
+      summary: Update Party Risks
+      operationId: updateRisks
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyRiskId
+          in: path
+          description: Party Risks Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRisksCmd'
+      responses:
+        '200':
+          description: Party Risks Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Risks Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/risks/:
+    get:
+      tags:
+        - Risks
+      summary: Fetch All Party Risks
+      operationId: fetchAllRisks
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewRisks'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/risks/{partyRiskId}:
+    get:
+      tags:
+        - Risks
+      summary: Fetch Party Risks
+      operationId: fetchRisks
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyRiskId
+          in: path
+          description: Party Risks Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewRisksCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/fatca:
+    post:
+      tags:
+        - Fatca
+      summary: Create Party Fatca
+      operationId: createFatca
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FatcaDetails'
+      responses:
+        '201':
+          description: Party Fatca Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewFatcaDetails'
+        '400':
+          description: Party Fatca Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/fatca/{partyFatcaDetailsId}/:
+    put:
+      tags:
+        - Fatca
+      summary: Update Fatca Details
+      operationId: updateFatca
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyFatcaDetailsId
+          in: path
+          description: Party Fatca Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFatcaDetailsCmd'
+      responses:
+        '200':
+          description: Party Document Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Document Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/fatca/:
+    get:
+      tags:
+        - Fatca
+      summary: Fetch All Party FatcaDetails
+      operationId: fetchAllFatca
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewFatcaDetails'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/fatca/{partyFatcaDetailsId}:
+    get:
+      tags:
+        - Fatca
+      summary: Fetch Party FatcaDetails
+      operationId: fetchFatca
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyFatcaDetailsId
+          in: path
+          description: Party Fatca Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewFatcaDetailsCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/memos:
+    post:
+      tags:
+        - Memos
+      summary: Create Party Memos
+      operationId: createMemos
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Memos'
+      responses:
+        '201':
+          description: Party Memo Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewMemos'
+        '400':
+          description: Party Memos Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/memos/{partyMemosId}/:
+    put:
+      tags:
+        - Memos
+      summary: Update Party Memos
+      operationId: updateMemos
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyMemosId
+          in: path
+          description: Party Memos Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemosCmd'
+      responses:
+        '200':
+          description: Party Memos Update Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Memos Update Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/memos/:
+    get:
+      tags:
+        - Memos
+      summary: Fetch All Party Memos
+      operationId: fetchAllMemos
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewMemos'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/memos/{partyMemosId}:
+    get:
+      tags:
+        - Memos
+      summary: Fetch Party Memos
+      operationId: fetchMemo
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyMemosId
+          in: path
+          description: Party Memos Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewMemosCmd'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/xref/:
+    get:
+      tags:
+        - Xref
+      summary: fetch all Xref details
+      operationId: fetchAllxref
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewXrefs'
+        '400':
+          description: Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+  /party/{partyIdentifier}/guardian:
+    post:
+      tags:
+        - Guardian
+      summary: Create Party Guardian
+      operationId: createGuardian
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guardians'
+      responses:
+        '201':
+          description: Party Guardian Create Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ViewGuardians'
+        '400':
+          description: Party Guardian Create Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+  /party/{partyIdentifier}/guardian/{partyGuardianId}:
+    delete:
+      tags:
+        - Guardian
+      summary: Delete Party Guardian
+      operationId: deleteGuardian
+      parameters:
+        - name: partyIdentifier
+          in: path
+          description: Party Identifier
+          required: true
+          schema:
+            type: string
+        - name: partyGuardianId
+          in: path
+          description: Party Guardian Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Guardian Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseApi'
+        '400':
+          description: Party Guardian Delete Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+  /party/dedupe:
+    post:
+      tags:
+        - Dedupe
+      summary: Dedupe
+      operationId: dedupeVerification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DedupeFieldRequestCmd'
+      responses:
+        '200':
+          description: Success Dedupe response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/DedupeFieldResponseCmd'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+  /party/universal-search:
+    post:
+      tags:
+        - Party
+      summary: Universal Search
+      operationId: universalSearch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UniversalSearchRequest'
+      responses:
+        '200':
+          description: Universal Search Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PartyResponseCmd'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApi'
+
+
+components:
+  schemas:
+    PartyRequestCmd:
+      type: object
+      required:
+        - party
+      properties:
+        party:
+          $ref: '#/components/schemas/CreatePartyCmd'
+        occupationDetail:
+          $ref: '#/components/schemas/CreateOccupationDetailCmd'
+        address:
+          $ref: '#/components/schemas/Address'
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetails'
+        assets:
+          $ref: '#/components/schemas/Assets'
+        memos:
+          $ref: '#/components/schemas/Memos'
+        risks:
+          $ref: '#/components/schemas/Risks'
+        fatcaDetails:
+          $ref: '#/components/schemas/FatcaDetails'
+        guardians:
+          $ref: '#/components/schemas/Guardians'
+        relations:
+          $ref: '#/components/schemas/Relations'
+        documents:
+          $ref: '#/components/schemas/Documents'
+
+    PartyResponseCmd:
+      type: object
+      properties:
+        party:
+          $ref: '#/components/schemas/ViewPartyCmd'
+        occupationDetail:
+          $ref: '#/components/schemas/ViewOccupationDetailCmd'
+        partyFlag:
+          $ref: '#/components/schemas/ViewPartyFlagCmd'
+        address:
+          $ref: '#/components/schemas/ViewAddress'
+        contactDetails:
+          $ref: '#/components/schemas/ViewContactDetails'
+        assets:
+          $ref: '#/components/schemas/ViewAssets'
+        memos:
+          $ref: '#/components/schemas/ViewMemos'
+        risks:
+          $ref: '#/components/schemas/ViewRisks'
+        fatcaDetails:
+          $ref: '#/components/schemas/ViewFatcaDetails'
+        guardians:
+          $ref: '#/components/schemas/ViewGuardians'
+        relations:
+          $ref: '#/components/schemas/ViewRelations'
+        xrefs:
+          $ref: '#/components/schemas/ViewXrefs'
+        documents:
+          $ref: '#/components/schemas/ViewDocuments'
+
+
+    UpdatePartyRequestCmd:
+      type: object
+      required:
+        - party
+      properties:
+        party:
+          $ref: '#/components/schemas/UpdatePartyCmd'
+        occupationDetail:
+          $ref: '#/components/schemas/UpdateOccupationDetailCmd'
+        partyFlag:
+          $ref: '#/components/schemas/UpdatePartyFlagCmd'
+        address:
+          $ref: '#/components/schemas/UpdateAddress'
+        contactDetails:
+          $ref: '#/components/schemas/UpdateContactDetails'
+        assets:
+          $ref: '#/components/schemas/UpdateAssets'
+        memos:
+          $ref: '#/components/schemas/UpdateMemos'
+        risks:
+          $ref: '#/components/schemas/UpdateRisks'
+        fatcaDetails:
+          $ref: '#/components/schemas/UpdateFatcaDetails'
+        guardians:
+          $ref: '#/components/schemas/UpdateGuardians'
+        relations:
+          $ref: '#/components/schemas/UpdateRelations'
+        documents:
+          $ref: '#/components/schemas/UpdateDocuments'
+
+    PartyCmd:
+      type: object
+      properties:
+        partyIdentifier:
+          maxLength: 36
+          minLength: 10
+          type: string
+          pattern: ^[a-zA-Z\d-]+$
+        type:
+          type: string
+          enum: [PROSPECT, CUSTOMER, CORPORATE]
+          example: "CUSTOMER"
+        salutationCode:
+          type: string
+          example: "01"
+        fullName:
+          type: string
+          example: "Joi Bristo Regino"
+        firstName:
+          maxLength: 100
+          type: string
+          example: "Joi"
+        middleName:
+          maxLength: 100
+          type: string
+          example: "Bristo"
+        lastName:
+          maxLength: 100
+          type: string
+          example: "Regino"
+        mothersMaidenName:
+          maxLength: 100
+          type: string
+          example: "Mia"
+        nickName:
+          maxLength: 100
+          type: string
+          example: "Jo"
+        gender:
+          type: string
+          enum: [MALE, FEMALE,OTHER]
+          example: "MALE"
+        dateOfBirth:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: DOB in DD-MM-YYYY format
+          example: "30-11-1997"
+        placeOfBirth:
+          type: string
+          example: "Da Nang"
+        primaryMobileNumber:
+          minLength: 10
+          maxLength: 12
+          type: string
+          pattern: "^\\d+$"
+          example: "9088563701"
+        primaryEmail:
+          type: string
+          format: email
+          example: "joibristo434@gmail.com"
+          pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        maritalStatus:
+          type: string
+          enum: [SINGLE, MARRIED, WIDOWED, DIVORCED]
+          example: "SINGLE"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE, DORMANT, CLOSED, PENDING,BLOCKED]
+          example: "ACTIVE"
+        nationalIdTypeCode:
+          type: string
+          example: "01"
+        nationalId:
+          type: string
+          minLength: 8
+          maxLength: 12
+          example: "80033848"
+        referralCode:
+          type: string
+          example: "RC01"
+        promoCode:
+          type: string
+          example: "T01"
+        relationTypeCode:
+          type: string
+          example: "01"
+        segmentCode:
+          type: string
+          example: "01"
+        countryOfBirthCode:
+          type: string
+          example: "01"
+        nationalityCode:
+          type: string
+          example: "01"
+        educationTypeCode:
+          type: string
+          example: "01"
+        isStaff:
+          type: boolean
+          example: true
+        staffCode:
+          type: string
+          example: "S22"
+        groupCode:
+          type: string
+          example: "G21"
+        portfolioCode:
+          type: string
+          example: "PP12"
+        countryOfResidenceCode:
+          type: string
+          example: "01"
+        residencyTypeCode:
+          type: string
+          example: "01"
+        jobPositionTypeCode:
+          type: string
+          example: "02"
+        amlRisk:
+          type: string
+          enum: [HIGH, MEDIUM,LOW]
+          example: "MEDIUM"
+        amlRiskEvalDate :
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: amlRiskEvalDate date in DD-MM-YYYY format
+          example: "20-11-2003"
+        amlCheckStatus:
+          type: boolean
+          example: false
+        sourceSystem:
+          type: string
+        createdBy:
+          type: string
+          example: "SYSTEM"
+
+    CreatePartyCmd:
+      allOf:
+        - $ref: '#/components/schemas/PartyCmd'
+        - type: object
+          properties:
+            createdByChannel:
+              type: string
+              example: "Web"
+
+      required:
+        - type
+        - salutationCode
+        - firstName
+        - gender
+        - dateOfBirth
+        - primaryMobileNumber
+        - status
+
+    UpdatePartyCmd:
+      allOf:
+        - $ref: '#/components/schemas/PartyCmd'
+        - type: object
+          properties:
+            partyIdentifier:
+              type: string
+              example: "123456789012"
+            updatedByChannel:
+              type: string
+              example: "Web"
+            updatedBy:
+              type: string
+              example: "SYSTEM"
+      required:
+        - partyIdentifier
+
+    ViewPartyCmd:
+      properties:
+        partyId:
+          type: integer
+          example: 3002
+        partyIdentifier:
+          type: string
+          example: "123456789012"
+        type:
+          type: string
+          example: "CUSTOMER"
+        salutationCode:
+          type: string
+          example: "01"
+        salutation:
+          type: string
+          example: "Mr."
+        fullName:
+          type: string
+          example: "Joi Bristo Regino"
+        firstName:
+          maxLength: 100
+          type: string
+          example: "Joi"
+        middleName:
+          maxLength: 100
+          type: string
+          example: "Bristo"
+        lastName:
+          maxLength: 100
+          type: string
+          example: "Regino"
+        mothersMaidenName:
+          maxLength: 100
+          type: string
+          example: "Mia"
+        nickName:
+          maxLength: 100
+          type: string
+          example: "Jo"
+        gender:
+          type: string
+          example: "MALE"
+        dateOfBirth:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: DOB in DD-MM-YYYY format
+          example: "30-11-1997"
+        placeOfBirth:
+          type: string
+          example: "Da Nang"
+        primaryMobileNumber:
+          minLength: 10
+          maxLength: 14
+          type: string
+          example: "9088563701"
+        primaryEmail:
+          type: string
+          format: email
+          pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+          example: "joibristo434@gmail.com"
+        maritalStatus:
+          type: string
+          example: "SINGLE"
+        status:
+          type: string
+          example: "ACTIVE"
+        nationalIdTypeCode:
+          type: string
+          example: "01"
+        nationalIdType:
+          type: string
+          example: "01"
+        nationalId:
+          type: string
+          example: "80033848"
+        referralCode:
+          type: string
+          example: "RC01"
+        promoCode:
+          type: string
+          example: "T01"
+        relationTypeCode:
+          type: string
+          example: "01"
+        relationType:
+          type: string
+          example: "01"
+        segmentCode:
+          type: string
+          example: "11"
+        segment:
+          type: string
+          example: "SEGMENT"
+        countryOfBirthCode:
+          type: string
+          example: "01"
+        countryOfBirth:
+          type: string
+          example: "IND"
+        nationalityCode:
+          type: string
+          example: "01"
+        nationality:
+          type: string
+          example: "Indian"
+        educationTypeCode:
+          type: string
+          example: "01"
+        educationType:
+          type: string
+          example: "01"
+        isStaff:
+          type: boolean
+          example: true
+        staffCode:
+          type: string
+          example: "S22"
+        groupCode:
+          type: string
+          example: "G21"
+        portfolioCode:
+          type: string
+          example: "PP12"
+        countryOfResidenceCode:
+          type: string
+          example: "01"
+        countryOfResidence:
+          type: string
+          example: "01"
+        residencyTypeCode:
+          type: string
+          example: "01"
+        residencyType:
+          type: string
+          example: "01"
+        jobPositionTypeCode:
+          type: string
+          example: "02"
+        jobPosition:
+          type: string
+          example: "MANAGER"
+        amlRisk:
+          type: string
+          enum: [HIGH, MEDIUM,LOW]
+          example: "MEDIUM"
+        amlRiskEvalDate :
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: amlRiskEvalDate date in DD-MM-YYYY format
+          example: "20-11-2003"
+        amlCheckStatus:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: createAt date in DD-MM-YYYY format
+          example: "20-11-2003"
+        createdBy:
+          type: string
+          example: "SYSTEM"
+        updatedAt:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: createAt date in DD-MM-YYYY format
+          example: "20-11-2003"
+        updatedBy:
+          type: string
+          example: "SYSTEM"
+        createdByChannel :
+          type: string
+          example: "20-11-2003"
+        updatedByChannel:
+          type: string
+          example: null
+          nullable: false
+        sourceSystem:
+          type: string
+        isDeleted:
+          type: boolean
+    OccupationDetailCmd:
+      type: object
+      properties:
+        professionCode:
+          type: string
+          example: "01"
+        professionTypeCode:
+          type: string
+          example: "01"
+        industryTypeCode:
+          type: string
+          example: "11"
+        companyTypeCode:
+          type: string
+          example: "CG09"
+        annualIncome:
+          type: integer
+          example: 91019
+        annualTurnover:
+          type: integer
+          example: 877887
+        taxId:
+          type: string
+          example: "TX01"
+        dateOfInCorporation:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Date Of InCorporation in DD-MM-YYYY format
+          example: "05-10-1980"
+
+    CreateOccupationDetailCmd:
+      allOf:
+        - $ref: '#/components/schemas/OccupationDetailCmd'
+
+    UpdateOccupationDetailCmd:
+      allOf:
+        - $ref: '#/components/schemas/OccupationDetailCmd'
+
+    ViewOccupationDetailCmd:
+      type: object
+      properties:
+        professionCode:
+          type: string
+          example: "01"
+        profession:
+          type: string
+          example: "01"
+        professionTypeCode:
+          type: string
+          example: "01"
+        professionType:
+          type: string
+          example: "01"
+        industryTypeCode:
+          type: string
+          example: "01"
+        industryType:
+          type: string
+          example: "industry1"
+        companyTypeCode:
+          type: string
+          example: "01"
+        company:
+          type: string
+          example: "Company1"
+        annualIncome:
+          type: integer
+          example: 91019
+        annualTurnover:
+          type: integer
+          example: 877887
+        taxId:
+          type: string
+          example: "TX01"
+        dateOfInCorporation:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Date Of InCorporation in DD-MM-YYYY format
+          example: "05-10-1980"
+
+    PartyFlagCmd:
+      properties:
+        isDeceased:
+          type: boolean
+        isSolvency:
+          type: boolean
+        isNpa:
+          type: boolean
+        isWillFullDefaulter:
+          type: boolean
+        willFullDefaulterDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Will Full Defaulter Date in DD-MM-YYYY format
+        isLoanOverDue:
+          type: boolean
+        isSuitFiled:
+          type: boolean
+        isPoliticallyExposed:
+          type: boolean
+        isFatcaApplicable:
+          type: boolean
+        isEmailStatementReg:
+          type: boolean
+        isUnderWatchList:
+          type: boolean
+
+
+    UpdatePartyFlagCmd:
+      allOf:
+        - $ref: '#/components/schemas/PartyFlagCmd'
+
+    ViewPartyFlagCmd:
+      allOf:
+        - $ref: '#/components/schemas/PartyFlagCmd'
+
+    PartyAddressCmd:
+      properties:
+        addressTypeCode:
+          type: string
+          example: "01"
+        isDefault:
+          type: boolean
+          example: true
+        addressLine1:
+          type: string
+          example: "14/12 Ky Dong Street"
+        addressLine2:
+          type: string
+          example: "Ward 3, District 17"
+        addressLine3:
+          type: string
+          example: "HCMC"
+        wardCode:
+          type: string
+          example: "01"
+        districtCode:
+          type: string
+          example: "D01"
+        cityCode:
+          type: string
+          example: "11"
+        cityZipCode:
+          type: integer
+          maxLength: 6
+          minLength: 5
+          example: 11001
+        countryCode:
+          type: string
+          example: "84"
+        documentId:
+          type: string
+          example: "01"
+
+    Address:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateAddressCmd'
+
+    UpdateAddress:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateAddressCmd'
+
+    ViewAddress:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewAddressCmd'
+
+    CreateAddressCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAddressCmd'
+      required:
+        - addressTypeCode
+        - addressLine1
+        - addressLine2
+
+    UpdateAddressCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAddressCmd'
+        - type: object
+          properties:
+            partyAddressId:
+              type: integer
+              example: 1
+      required:
+        - partyAddressId
+    ViewAddressCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAddressCmd'
+        - type: object
+          properties:
+            partyAddressId:
+              type: integer
+            ward:
+              type: string
+            district:
+              type: string
+            city:
+              type: string
+            country:
+              type: string
+
+    PartyContactDetailCmd:
+      properties:
+        contactTypeCode:
+          type: string
+          example: "01"
+        contactValue:
+          type: string
+          example: "9918831234"
+        isdCode:
+          type: string
+          example: "84"
+        isPrimary:
+          type: boolean
+          example: true
+        isVerified:
+          type: boolean
+          example: true
+        verifiedMode:
+          type: string
+          example: "verified"
+        lastVerifiedDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Last Verified Date in DD-MM-YYYY format
+          example: "30-08-1982"
+        isDnd:
+          type: boolean
+          example: true
+
+    ContactDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateContactDetailsCmd'
+
+    UpdateContactDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateContactDetailsCmd'
+
+    ViewContactDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewContactDetailsCmd'
+
+    CreateContactDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyContactDetailCmd'
+      required:
+        - contactTypeCode
+        - contactValue
+
+    UpdateContactDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyContactDetailCmd'
+        - type: object
+          properties:
+            partyContactDetailsId:
+              type: integer
+              example: 1
+      required:
+        - partyContactDetailsId
+    ViewContactDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyContactDetailCmd'
+        - type: object
+          properties:
+            partyContactDetailsId:
+              type: integer
+            contactType:
+              type: string
+
+    PartyAssetCmd:
+      properties:
+        assetTypeCode:
+          type: string
+          example: "01"
+        assetName:
+          type: string
+          example: "house"
+        potentialValue:
+          type: number
+          example: "99999999"
+        isMortgaged:
+          type: boolean
+          example: true
+
+    Assets:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateAssetsCmd'
+    UpdateAssets:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateAssetsCmd'
+    ViewAssets:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewAssetsCmd'
+
+    CreateAssetsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAssetCmd'
+
+    UpdateAssetsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAssetCmd'
+        - type: object
+          properties:
+            partyAssetId:
+              type: integer
+              example: 1
+      required:
+        - partyAssetId
+    ViewAssetsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyAssetCmd'
+        - type: object
+          properties:
+            partyAssetId:
+              type: integer
+            assetType:
+              type: string
+
+    PartyMemoCmd:
+      properties:
+        memoTypeCode:
+          type: string
+          example: "01"
+        severity:
+          type: string
+          example: "S1"
+        score:
+          type: number
+          example: 11
+        validFrom:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Valid From in DD-MM-YYYY format
+          example: "03-11-1901"
+        validTo:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Valid To in DD-MM-YYYY format
+          example: "02-11-1915"
+
+    Memos:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateMemosCmd'
+    UpdateMemos:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateMemosCmd'
+    ViewMemos:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewMemosCmd'
+    CreateMemosCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyMemoCmd'
+
+    UpdateMemosCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyMemoCmd'
+        - type: object
+          properties:
+            partyMemoId:
+              type: integer
+              example: 1
+      required:
+        - partyMemoId
+    ViewMemosCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyMemoCmd'
+        - type: object
+          properties:
+            partyMemoId:
+              type: integer
+            memoType:
+              type: string
+
+    PartyRiskCmd:
+      properties:
+        riskTypeCode:
+          type: string
+          example: "01"
+        riskScore:
+          type: number
+          example: 11
+        evaluationDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Evaluation Date in DD-MM-YYYY format
+          example: "02-04-2090"
+        validUntil:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Valid Until in DD-MM-YYYY format
+          example: "20-03-2098"
+
+    Risks:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateRisksCmd'
+    UpdateRisks:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateRisksCmd'
+    ViewRisks:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewRisksCmd'
+    CreateRisksCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRiskCmd'
+
+    UpdateRisksCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRiskCmd'
+        - type: object
+          properties:
+            partyRiskId:
+              type: integer
+              example: 1
+      required:
+        - partyRiskId
+
+    ViewRisksCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRiskCmd'
+        - type: object
+          properties:
+            partyRiskId:
+              type: integer
+            riskType:
+              type: string
+
+    PartyFatcaDetailCmd:
+      properties:
+        placeOfIncorporation:
+          type: string
+          example: "Da Nang"
+        countryOfIncorporation:
+          type: string
+          example: "Vietnam"
+        countryOfResidence:
+          type: string
+          example: "Vietnam"
+        incorporationNumber:
+          type: string
+          example: "01"
+        boardRelNumber:
+          type: string
+          example: "BR01"
+        reportBlNumber:
+          type: string
+          example: "R01"
+        originalReportBlNumber:
+          type: string
+          example: "OR1"
+        fatcaTaxId:
+          type: string
+          example: "01"
+        documentReferenceId:
+          type: string
+          example: "11"
+
+    FatcaDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateFatcaDetailsCmd'
+
+    UpdateFatcaDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateFatcaDetailsCmd'
+    ViewFatcaDetails:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewFatcaDetailsCmd'
+    CreateFatcaDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyFatcaDetailCmd'
+
+    UpdateFatcaDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyFatcaDetailCmd'
+        - type: object
+          properties:
+            partyFatcaDetailsId:
+              type: integer
+              example: 1
+      required:
+        - partyFatcaDetailsId
+    ViewFatcaDetailsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyFatcaDetailCmd'
+        - type: object
+          properties:
+            partyFatcaDetailsId:
+              type: integer
+
+    PartyGuardianCmd:
+      properties:
+        guardianFirstName:
+          type: string
+          example: "Anh"
+        guardianMiddleName:
+          type: string
+          example: "Van"
+        guardianLastName:
+          type: string
+          example: "Duc"
+        guardianRelation:
+          type: string
+          example: "Father"
+        guardianAddressLine1:
+          type: string
+          example: "Da Nang"
+        guardianAddressLine2:
+          type: string
+          example: "House 14"
+        guardianAddressLine3:
+          type: string
+          example: "District 17"
+        guardianWardCode:
+          type: string
+          example: "01"
+        guardianDistrictCode:
+          type: string
+          example: "01"
+        guardianCityCode:
+          type: string
+          example: "01"
+
+    Guardians:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateGuardianCmd'
+    UpdateGuardians:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateGuardiansCmd'
+    ViewGuardians:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewGuardiansCmd'
+    CreateGuardianCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyGuardianCmd'
+
+    UpdateGuardiansCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyGuardianCmd'
+        - type: object
+          properties:
+            partyGuardianId:
+              type: integer
+              example: 1
+      required:
+        - partyGuardianId
+    ViewGuardiansCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyGuardianCmd'
+        - type: object
+          properties:
+            partyGuardianId:
+              type: integer
+            guardianWard:
+              type: string
+            guardianDistrict:
+              type: string
+            guardianCity:
+              type: string
+
+    PartyRelationCmd:
+      properties:
+        secondaryPartyId:
+          type: string
+          example: "02"
+        partyRelationTypeCode:
+          type: string
+          example: "01"
+        invRelation:
+          type: string
+          example: "Y"
+
+    Relations:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateRelationsCmd'
+    UpdateRelations:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateRelationsCmd'
+    ViewRelations:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewRelationsCmd'
+    CreateRelationsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRelationCmd'
+
+    UpdateRelationsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRelationCmd'
+        - type: object
+          properties:
+            partyRelationId:
+              type: integer
+              example: 1
+      required:
+        - partyRelationId
+    ViewRelationsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyRelationCmd'
+        - type: object
+          properties:
+            partyRelationId:
+              type: integer
+            partyRelationType:
+              type: string
+
+    PartyXrefCmd:
+      properties:
+        systemCode:
+          type: string
+          example: "01"
+        xrefId:
+          type: string
+          example: "11"
+    Xrefs:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateXrefsCmd'
+    UpdateXrefs:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateXrefsCmd'
+    ViewXrefs:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewXrefsCmd'
+    CreateXrefsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyXrefCmd'
+
+    UpdateXrefsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyXrefCmd'
+        - type: object
+          properties:
+            partyXrefId:
+              type: integer
+              example: 1
+      required:
+        - partyXrefId
+    ViewXrefsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyXrefCmd'
+        - type: object
+          properties:
+            partyXrefId:
+              type: integer
+
+
+    PartyDocumentCmd:
+      properties:
+        documentTypeCode:
+          type: string
+          example: "01"
+        documentNumber:
+          type: string
+          example: "11"
+        documentNumberMasked:
+          type: string
+          example: "01"
+        documentNumberToken:
+          type: string
+          example: "02"
+        issuingDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Issuing Date in DD-MM-YYYY format
+          example: "14-05-1972"
+        expiryDate:
+          type: string
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          description: Expiry Date in DD-MM-YYYY format
+          example: "24-05-1979"
+        issuingPlace:
+          type: string
+          example: "Dong Nai"
+        issuingCountryCode:
+          type: string
+          example: "01"
+        issuingCountry:
+          type: string
+          example: "vietnam"
+        isPoi:
+          type: boolean
+          example: true
+        isPoa:
+          type: boolean
+          example: true
+        dmsReferenceId:
+          type: string
+          example: "01"
+        verificationStatus:
+          type: string
+          example: "verified"
+        additionalData:
+          type: string
+          example: "Y"
+
+    Documents:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CreateDocumentCmd'
+    UpdateDocuments:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/UpdateDocumentsCmd'
+    ViewDocuments:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/ViewDocumentsCmd'
+    CreateDocumentCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyDocumentCmd'
+
+    UpdateDocumentsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyDocumentCmd'
+        - type: object
+          properties:
+            partyDocumentId:
+              type: integer
+              example: 1
+      required:
+        - partyDocumentId
+    ViewDocumentsCmd:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PartyDocumentCmd'
+        - type: object
+          properties:
+            partyDocumentId:
+              type: integer
+            documentType:
+              type: string
+
+    DedupeFieldRequestCmd:
+      properties:
+        countryCode:
+          type: string
+          example: "01"
+        fullName:
+          type: string
+          example: "Joi Bristo Regino"
+        mobileNumber:
+          type: string
+          minLength: 10
+          maxLength: 12
+          example: "9400000290"
+        dateOfBirth:
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          type: string
+          description: Date of birth in DD-MM-YYYY format
+          example: "30-11-1997"
+        nationalIdTypeCode:
+          type: string
+          example: "01"
+        nationalId:
+          type: string
+          example: "80033848"
+        nationalityCode:
+          type: string
+          example: "01"
+
+    DedupeFieldResponseCmd:
+      properties:
+        info:
+          type: string
+        result:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/PartyResponseCmd'
+
+    PartyDistinctiveSearchCmd:
+      type: object
+      properties:
+        partyId:
+          type: integer
+          example: 1
+        partyIdentifier:
+          type: string
+          example: "1234567890"
+        firstName:
+          type: string
+          example: "Dan"
+        lastName:
+          type: string
+          example: "Lang"
+        mobileNumber:
+          type: string
+          minLength: 10
+          maxLength: 12
+          example: "9899112276"
+        emailId:
+          type: string
+          example: "dane1@gmail.com"
+          pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        dateOfBirth:
+          pattern: '^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$'
+          type: string
+          description: Date of birth in DD-MM-YYYY format
+          example: "01-01-1967"
+
+    PartySearchResponseCmd:
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        total:
+          type: integer
+          format: int64
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyRecordCmd'
+    PartyRecordCmd:
+      properties:
+        partyId:
+          type: integer
+          example: 1
+        partyIdentifier:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        mobileNumber:
+          type: string
+        emailId:
+          type: string
+        nationality:
+          type: string
+        onBoardingDate:
+          type: string
+        customerRiskCategory:
+          type: string
+
+    PartyEmailUpdateCmd:
+      required:
+        - partyIdentifier
+        - primaryEmail
+      properties:
+        partyIdentifier:
+          type: string
+          example : "1234567890"
+        primaryEmail:
+          type: string
+          format: email
+          example : "test@gamil.com"
+          pattern: '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+
+    PartyMobileUpdateCmd:
+
+      required:
+        - partyIdentifier
+        - primaryMobileNumber
+      properties:
+        partyIdentifier:
+          type: string
+          example : "1234567890"
+        primaryMobileNumber:
+          type: string
+          minLength: 10
+          maxLength: 12
+          example : "9400000290"
+
+    PartyStatusUpdateCmd:
+      required:
+        - partyIdentifier
+        - status
+      properties:
+        partyIdentifier:
+          type: string
+          example : "1234567890"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE, DORMANT, CLOSED, PENDING]
+          example: "INACTIVE"
+
+    AdvanceSearchRequestCmd:
+      type: object
+      required:
+        - must
+      properties:
+        must:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            additionalProperties:
+              type: string
+
+        optional:
+          type: array
+          uniqueItems: true
+          items:
+            type: object
+            additionalProperties:
+              type: string
+
+    UniversalSearchRequest:
+      type: object
+      required:
+        - searchFor
+      properties:
+        searchFor:
+          type: string
+
+    ResponseApi:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestID:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+
+    ErrorResponseApi:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestID:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            errors:
+              type: array
+              items:
+                type: object
+
+    SuccessResponseApi:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ResponseApi'
+        - type: object
+          properties:
+            data:
+              type: object

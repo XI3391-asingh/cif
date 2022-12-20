@@ -1,5 +1,12 @@
-.DS_Store
-.idea/*
-.gradle/*
-out/
+.settings/
+.gradle/
+.idea
+.classpath
+.project
+.eclipse
 build/
+.DS_Store
+.vscode/
+file:/
+todo.txt
+out/

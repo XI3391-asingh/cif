@@ -1,0 +1,130 @@
+{
+  "party": {
+    "partyIdentifier": "1",
+    "partyType": "Customer",
+    "salutationCode": "01",
+    "firstName": "Mukesh",
+    "middleName": "",
+    "lastName": "",
+    "mothersMaidenName": "",
+    "nickName": "Johi",
+    "gender": "FEMALE",
+    "dateOfBirth": "30-09-1985",
+    "placeOfBirth": "Da Nang",
+    "primaryMobileNumber": "9988568709",
+    "primaryEmail": "joibristo434@gmail.com",
+    "maritalStatus": "married",
+    "countryOfBirthCode": "01",
+    "nationalityCode": "01",
+    "educationTypeCode": "02",
+    "isStaff": true,
+    "staffCode": "SC01",
+    "groupCode": "GC01",
+    "portfolioCode": "PC01",
+    "relationType": "01",
+    "partyStatus": "Active",
+    "referralCode": "RC01",
+    "promoCode": "PC01",
+    "partySegment": "01",
+    "countryOfResidenceCode": "01",
+    "residencyTypeCode": "02",
+    "jobPosition": "Manager",
+    "createdByChannel": "WEB",
+    "partySegmentCode": "01",
+    "createdAt": "15-09-2022T16:06:55"
+  },
+  "occupationDetail": {
+    "professionCode": "01",
+    "professionTypeCode": "01",
+    "industryTypeCode": "01",
+    "companyTypeCode": "01",
+    "annualIncome": 900000,
+    "annualTurnover": 90000,
+    "taxId": "TX-00",
+    "dateOfInCorporation": "30-09-2013"
+  },
+  "address": [
+    {
+      "addressTypeCode": "01",
+      "isDefault": true,
+      "addressLine1": "14/12 Ky Dong Street",
+      "addressLine2": "Ward 3, District 17",
+      "addressLine3": "HCMC",
+      "wardCode": "01",
+      "districtCode": "01",
+      "cityCode": "01",
+      "cityZipCode": 246174,
+      "provinceCode": "01",
+      "countryCode": "01",
+      "documentId": "DOC-001"
+    },
+    {
+      "addressTypeCode": "02",
+      "isDefault": false,
+      "addressLine1": "93 Nguyen Thai Hoc Street",
+      "addressLine2": "Cau Ong Lanh Ward",
+      "addressLine3": "District 1",
+      "wardCode": "02",
+      "districtCode": "02",
+      "cityCode": "02",
+      "cityZipCode": 246175,
+      "provinceCode": "02",
+      "countryCode": "01",
+      "documentId": "DOC-002"
+    }
+  ],
+  "contactDetails": [
+    {
+      "contactType": "01",
+      "contactValue": "9234587890",
+      "isPrimary": true,
+      "isVerified": true,
+      "verifiedMode": "DSC",
+      "lastVerifiedDate": "22-01-2015",
+      "isDnd": true
+    },
+    {
+      "contactType": "02",
+      "contactValue": "654587890",
+      "isPrimary": true,
+      "isVerified": true,
+      "verifiedMode": "DSC",
+      "lastVerifiedDate": "11-12-2021",
+      "isDnd": true
+    }
+  ],
+  "assets": [
+    {
+      "assetTypeCode": "01",
+      "assetName": "home",
+      "potentialValue": 900000,
+      "isMortgaged": true
+    },
+    {
+      "assetTypeCode": "02",
+      "assetName": "land",
+      "potentialValue": 800000,
+      "isMortgaged": true
+    }
+  ],
+  "nominee": [
+    {
+      "salutationCode": "01",
+      "firstName": "Adah",
+      "middleName": "Britto",
+      "lastName": "Alexandra",
+      "nomineeRelationTypeCode": "01",
+      "nationalId": "1",
+      "percentage": 50
+    },
+    {
+      "salutationCode": "02",
+      "firstName": "Yothosh",
+      "middleName": "Britto",
+      "lastName": "Alexandra",
+      "nomineeRelationTypeCode": "01",
+      "nationalId": "1",
+      "percentage": 100
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "adapterConfigId": 51,
+  "sourceSystemId": 98,
+  "integrationSystemId": 64,
+  "sourceSystemCode": "TEST",
+  "integrationSystemCode": "TEST",
+  "isCreate": false,
+  "isUpdate": true
+}

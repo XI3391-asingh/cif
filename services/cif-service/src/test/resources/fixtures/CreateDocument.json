@@ -1,0 +1,16 @@
+ {
+    "documentTypeCode": "11",
+    "documentNumber": "19",
+    "documentNumberMasked": "1919",
+    "documentNumberToken": "2",
+    "issuingDate": "30-03-2001",
+    "expiryDate": "07-01-2002",
+    "issuingPlace": "Da Nang",
+    "issuingCountryCode": "84",
+    "issuingCountry": "Vietnam",
+    "isPoi": true,
+    "isPoa": true,
+    "dmsReferenceId": "1",
+    "verificationStatus": "V1",
+    "additionalData": "N"
+  }

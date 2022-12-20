@@ -1,0 +1,2734 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Party CIF Management",
+    "description": "This is to perform CIF management operations\n",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/Xebia5/partyMgmt/0.1",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://8w6j8z2903.execute-api.ap-south-1.amazonaws.com/dev",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "dedupeCheck",
+      "description": "Check for Deduplication"
+    },
+    {
+      "name": "genericPartySearch",
+      "description": "API to search a Party record based on parameters"
+    },
+    {
+      "name": "auditSearchWithCIFId",
+      "description": "Fetch the history of changes done on Party record with Cif id"
+    },
+    {
+      "name": "auditSearchWithTrailId",
+      "description": "Details listing based on the Audit Trail ID selection"
+    },
+    {
+      "name": "fetchCIFByMobileOrCIF",
+      "description": "Fetch API to get the Complete Party details based on the CIF"
+    },
+    {
+      "name": "createPartyCIF",
+      "description": "Create a Party record in the CIF db"
+    },
+    {
+      "name": "updatePartyCIF",
+      "description": "Generic update of Party record (Generic API to update all fields in the CIF DB)"
+    },
+    {
+      "name": "updatePartyCIFContacts",
+      "description": "Change the Party's contact details Address, Email,  Mobile number"
+    },
+    {
+      "name": "updatePartyCIFStatus",
+      "description": "Update of CIF Party status"
+    },
+    {
+      "name": "updatePrimaryEmailId",
+      "description": "Update the Email of the Party against the record"
+    }
+  ],
+  "paths": {
+    "/cifmgmt/v1/dedupeCheck": {
+      "post": {
+        "tags": [
+          "dedupeCheck"
+        ],
+        "summary": "Check for Dedupe with Mobile number",
+        "description": "Returns the Dedupe status",
+        "operationId": "dedupeCheck",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Dedupe"
+        },
+        "responses": {
+          "200": {
+            "description": "Dedupe check success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DedupeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/genericPartySearch": {
+      "post": {
+        "tags": [
+          "genericPartySearch"
+        ],
+        "summary": "Search for Party CIF using Name or mobile number or Email id or DOB",
+        "description": "Returns the Corresponding CIF details in List",
+        "operationId": "genericPartySearch",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of items that may be returned for a single request. i.e pagesize",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The starting point within the collection of resource results.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sortingOrder",
+            "in": "query",
+            "description": "The starting point within the collection of resource results.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/GenericPartySearchCIF"
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the CIF details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericPartySearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/auditSearch": {
+      "get": {
+        "tags": [
+          "auditSearchWithCIFId"
+        ],
+        "summary": "Fetch the history of changes done on Party record.",
+        "description": "Returns the Trail ID and event attribute details as list",
+        "operationId": "auditSearchWithCIFId",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cifId",
+            "in": "header",
+            "description": "Provide CIF number",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Trail ID and event attribute details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditTrailSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/auditTrailSearch": {
+      "get": {
+        "tags": [
+          "auditSearchWithTrailId"
+        ],
+        "summary": "Fetch the history of changes done on Party record.",
+        "description": "Returns the Trail ID and event attribute details as list",
+        "operationId": "auditSearchWithTrailId",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "trailId",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "description": "trail Id of the CIF events"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Trail ID and event attribute details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditTrailSearchWithTrailIdResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/partyCIF": {
+      "get": {
+        "tags": [
+          "fetchCIFByMobileOrCIF"
+        ],
+        "summary": "Get customer details using CIF ID or Mobile Number",
+        "description": "Get customer details using CIF ID or Mobile Number",
+        "operationId": "fetchCIFByMobileOrCIF",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cifId",
+            "in": "header",
+            "description": "Provide CIF number",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "mobileNumber",
+            "in": "header",
+            "description": "Provide mobile number",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer details fetch using CIF ID or Mobile Number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid CIF ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "updatePartyCIF"
+        ],
+        "summary": "Update the existing CIF file with all the parameters",
+        "description": "Returns Update Status",
+        "operationId": "updatePartyCIF",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePartyCIF"
+        },
+        "responses": {
+          "200": {
+            "description": "Update the CIF file with the input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyCIFResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "createPartyCIF"
+        ],
+        "summary": "Create new CIF file with all the parameters",
+        "description": "Returns CIF number",
+        "operationId": "createPartyCIF",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreatePartyCIF"
+        },
+        "responses": {
+          "201": {
+            "description": "CIF file has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyCIFResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/partyCIF/contacts": {
+      "put": {
+        "tags": [
+          "updatePartyCIFContacts"
+        ],
+        "summary": "Update Contact Details(Address, Email, Mobile Number) of the existing CIF",
+        "description": "Returns Update Status",
+        "operationId": "updatePartyCIFContacts",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePartyCIFContacts"
+        },
+        "responses": {
+          "200": {
+            "description": "Update the CIF file with the input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePartyCIFContactsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/partyCIF/partyStatus": {
+      "put": {
+        "tags": [
+          "updatePartyCIFStatus"
+        ],
+        "summary": "Update Contact Details(Address, Email, Mobile Number) of the existing CIF",
+        "description": "Returns Update Status",
+        "operationId": "updatePartyCIFStatus",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePartyCIFStatus"
+        },
+        "responses": {
+          "200": {
+            "description": "Update the CIF file with the input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePartyCIFStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/partyCIF/primaryEmailId": {
+      "put": {
+        "tags": [
+          "updatePrimaryEmailId"
+        ],
+        "summary": "Update customer's email id",
+        "description": "Update customer's email id",
+        "operationId": "updatePrimaryEmailId",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePartyCIFStatus"
+        },
+        "responses": {
+          "200": {
+            "description": "Update customer's primary Email id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePartyCIFStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    },
+    "/cifmgmt/v1/partyCIF/primaryMobileNumber": {
+      "put": {
+        "tags": [
+          "updateprimaryMobileNumber"
+        ],
+        "summary": "Update customer's Mobile number",
+        "description": "Update customer's Mobile Number",
+        "operationId": "uupdateprimaryMobileNumber",
+        "parameters": [
+          {
+            "name": "xSessionId",
+            "in": "header",
+            "description": "A unique identifier for the session",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xMessageId",
+            "in": "header",
+            "description": "A unique identifier for this message exchange",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "description": "The identifier for logged in user that is sending requests via channels",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "xChannelId",
+            "in": "header",
+            "description": "Short identifier for consuming channel or system",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePartyCIFStatus"
+        },
+        "responses": {
+          "200": {
+            "description": "Update status of customer's primary mobile number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePartyCIFStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/schemas/UnauthorizedError"
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UnauthorizedError": {
+        "description": "Authentication information is missing or invalid"
+      },
+      "DedupeRequest": {
+        "properties": {
+          "mobileNumber": {
+            "maximum": 9999999999,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          }
+        }
+      },
+      "DedupeResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "cifId": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 200,
+          "cifId": 123456789,
+          "message": "dedup check success",
+          "description": "Mobile number does not exits"
+        }
+      },
+      "DedupeErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "code": 400,
+          "status": "dedup check failed",
+          "description": "Mobile number already exits"
+        }
+      },
+      "PartyCIFResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "cifId": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 200,
+          "cifId": 123456789,
+          "message": "Success",
+          "description": "CIF created/updated successfully"
+        }
+      },
+      "UpdatePartyCIFContactsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "cifId": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 200,
+          "cifId": 123456789,
+          "message": "Success",
+          "description": "Address/Email/MobileNumber updated successfully"
+        }
+      },
+      "UpdatePartyCIFStatusResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "cifId": {
+            "maxLength": 3,
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "statusCode": 200,
+          "cifId": 123456789,
+          "message": "Success",
+          "description": "Customer status updated successfully"
+        }
+      },
+      "FetchCIFwithIDRequest": {
+        "properties": {
+          "cifId": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "mobileNumber": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          }
+        },
+        "example": {
+          "cifId": 123456789,
+          "mobileNumber": 999999999
+        }
+      },
+      "PartyCIFId": {
+        "required": [
+          "cifId",
+          "cifTypeId"
+        ],
+        "type": "object",
+        "properties": {
+          "cifId": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "cifTypeId": {
+            "type": "string",
+            "enum": [
+              "Prospect",
+              "Party",
+              "Corporate"
+            ]
+          }
+        },
+        "example": {
+          "cifId": 123456789,
+          "cifTypeId": "Prospect"
+        }
+      },
+      "GenericPartySearchRequest": {
+        "properties": {
+          "firstName": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "mobileNumber": {
+            "maxLength": 12,
+            "type": "integer"
+          },
+          "emailId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "DOB in DD-MM-YYYY format"
+          }
+        },
+        "example": {
+          "firstName": "John",
+          "lastName": "Regino",
+          "mobileName": 98987896,
+          "emailId": "testing@gmail.com",
+          "dateOfBirth": "30-09-1985"
+        }
+      },
+      "GenericPartySearchResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericPartySearchResponse_results"
+            }
+          }
+        },
+        "example": {
+          "results": [
+            {
+              "cifId": 123456789,
+              "firstName": "John",
+              "middleName": "Bristo",
+              "lastName": "Regino",
+              "dateOfBirth": "30-09-1985",
+              "primaryMobile": 98987896,
+              "primaryEmail": "testing@gmail.com",
+              "nationality": "Indian"
+            }
+          ],
+          "limit": 50,
+          "offset": 101
+        }
+      },
+      "AuditTrailSearchResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditTrailSearchResponse_results"
+            }
+          }
+        },
+        "example": {
+          "results": [
+            {
+              "trailId": "123456789-13321",
+              "eventType": "change",
+              "modifitedAttribute": "Name",
+              "modifitedDate": "01-06-2022",
+              "modifitedChannel": "IB"
+            }
+          ]
+        }
+      },
+      "AuditTrailSearchWithTrailIdResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditTrailSearchResponse_results"
+            }
+          }
+        },
+        "example": {
+          "results": [
+            {
+              "trailId": "123456789-13321",
+              "summary": "Changed the phone number",
+              "modifiedAttribute": "phone number",
+              "previousValue": 987654321,
+              "currentValue": 8796964635
+            }
+          ]
+        }
+      },
+      "UpdateCIFAddressSchema": {
+        "type": "object",
+        "properties": {
+          "updateAddress": {
+            "$ref": "#/components/schemas/UpdateCIFAddressSchema_updateAddress"
+          }
+        }
+      },
+      "UpdateCIFMobileNumberSchema": {
+        "type": "object",
+        "properties": {
+          "updateMobile": {
+            "$ref": "#/components/schemas/UpdateCIFMobileNumberSchema_updateMobile"
+          }
+        }
+      },
+      "UpdateCIFEmailIdSchema": {
+        "type": "object",
+        "properties": {
+          "updateEmail": {
+            "$ref": "#/components/schemas/UpdateCIFEmailIdSchema_updateEmail"
+          }
+        }
+      },
+      "UpdatePartyCIFStatusSchema": {
+        "type": "object",
+        "properties": {
+          "updateStatus": {
+            "$ref": "#/components/schemas/UpdatePartyCIFStatusSchema_updateStatus"
+          }
+        }
+      },
+      "AddressSchema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressSchema_address"
+            }
+          }
+        },
+        "example": {
+          "address": [
+            {
+              "addressType": "Home",
+              "isDefault": true,
+              "SameAsPermanentAddress": true,
+              "addressLine1": "SY",
+              "addressLine2": "SY",
+              "addressLine3": "SY",
+              "ward": 10,
+              "district": "Mumbai",
+              "cityName": "Mumbai",
+              "cityZipCode": 600100,
+              "state": "Maharastra",
+              "countryId": 91,
+              "docId": "D1"
+            },
+            {
+              "addressType": "Office",
+              "isDefault": false,
+              "SameAsPermanentAddress": false,
+              "addressLine1": "SE",
+              "addressLine2": "SE",
+              "addressLine3": "SE",
+              "ward": 10,
+              "district": "Mumbai",
+              "cityName": "Mumbai",
+              "cityZipCode": 600100,
+              "state": "Maharastra",
+              "countryId": 91,
+              "docId": "D1"
+            }
+          ]
+        }
+      },
+      "ContactDetailsSchema": {
+        "type": "object",
+        "properties": {
+          "contactDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactDetailsSchema_contactDetails"
+            }
+          }
+        },
+        "example": {
+          "contactDetails": [
+            {
+              "contactType": "home",
+              "contactValue": 989898996,
+              "isPrimary": true,
+              "isVerified": true,
+              "verifiedMode": 10,
+              "lastVerifiedDate": "22-01-2015",
+              "isDnd": true
+            },
+            {
+              "contactType": "office",
+              "contactValue": 982712828,
+              "isPrimary": true,
+              "isVerified": true,
+              "verifiedMode": 10,
+              "lastVerifiedDate": "11-12-2021",
+              "isDnd": true
+            }
+          ]
+        }
+      },
+      "CustomerInformationSchema": {
+        "type": "object",
+        "properties": {
+          "customerInformation": {
+            "$ref": "#/components/schemas/CustomerInformationSchema_customerInformation"
+          }
+        },
+        "example": {
+          "customerInformation": {
+            "salutationId": 123,
+            "firstName": "John",
+            "middleName": "Bristo",
+            "lastName": "Regino",
+            "mothersMaidenName": "Regino",
+            "nickName": "John",
+            "genderId": "G1",
+            "dateOfBirth": "30-09-1985",
+            "placeOfBirth": "Mumbai",
+            "countryOfBirth": "India",
+            "primaryMobile": 123456789,
+            "primaryEmail": "testing@gmail.com",
+            "maritalStatus": "married",
+            "nationality": "Indian",
+            "nationalityType": "Citizen",
+            "educationType": "PG",
+            "profession": "IT",
+            "professionType": "Industry",
+            "industryType": "Banking",
+            "annualIncome": 900000,
+            "annualTurnover": 90000,
+            "taxId": "ASBPPPHGFC",
+            "dateOfInCorporation": "30-09-2013",
+            "isStaff": true,
+            "staffCode": "SC01",
+            "companyCode": "C01",
+            "groupCode": "GC01",
+            "portfolioCode": "PC01",
+            "custRiskCategory": "CRC01",
+            "lastRiskEvalDate": "LREVD01",
+            "relationType": "R01",
+            "partyStatus": "Active",
+            "referralCode": "RC01",
+            "promoCode": "PC01",
+            "partySegment": "TP"
+          }
+        }
+      },
+      "FatcaSchema": {
+        "type": "object",
+        "properties": {
+          "fatca": {
+            "$ref": "#/components/schemas/FatcaSchema_fatca"
+          }
+        },
+        "example": {
+          "fatca": {
+            "placeOfIncorp": "SBI",
+            "countryOfIncorp": "India",
+            "countryOfResidence": "India",
+            "inCorpNo": "CR001",
+            "boardReslNo": "Yest King",
+            "reportBLNo": "Yatest",
+            "taxId": "ABPP88ATC"
+          }
+        }
+      },
+      "FlagMemosSchema": {
+        "type": "object",
+        "properties": {
+          "flagMemos": {
+            "$ref": "#/components/schemas/FlagMemosSchema_flagMemos"
+          }
+        },
+        "example": {
+          "flagMemos": {
+            "amlCheckStatus": true,
+            "isDeceased": true,
+            "issolvency": true,
+            "isNpa": true,
+            "isWillFullDefaulter": true,
+            "willFullDefaulterDate": "23-09-2025",
+            "isLoanOverDue": true,
+            "isSuitFiled": true,
+            "isPoliticallyExposed": false,
+            "isFatcaApplicable": false,
+            "isEmailStatementReg": true,
+            "isUnderWatchList": true
+          }
+        }
+      },
+      "GuardianSchema": {
+        "type": "object",
+        "properties": {
+          "guardian": {
+            "$ref": "#/components/schemas/GuardianSchema_guardian"
+          }
+        },
+        "example": {
+          "guardian": {
+            "firstName": "Adia",
+            "middleName": "Ashley",
+            "lastName": "Hanah",
+            "addressLine1": "F4, King Street",
+            "addressLine2": "1st Cross",
+            "addressLine3": "Mumbai",
+            "ward": 10,
+            "district": "Ramda",
+            "cityName": "Mumbai",
+            "cityZipCode": 110100,
+            "state": "Maharastra",
+            "country": "India"
+          }
+        }
+      },
+      "NomineeSchema": {
+        "type": "object",
+        "properties": {
+          "nominee": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NomineeSchema_nominee"
+            }
+          }
+        },
+        "example": {
+          "nominee": [
+            {
+              "firstName": "Adah",
+              "secondName": "Britto",
+              "lastName": "Alexandra",
+              "relation": "Father",
+              "nationalId": "N01",
+              "nationalPercentage": 50
+            },
+            {
+              "firstName": "Yothosh",
+              "secondName": "Britto",
+              "lastName": "Alexandra",
+              "relation": "Brother",
+              "nationalId": "N01",
+              "nationalPercentage": 50
+            }
+          ]
+        }
+      },
+      "AssetsSchema": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetsSchema_assets"
+            }
+          }
+        },
+        "example": {
+          "assets": [
+            {
+              "type": "non movable",
+              "name": "home",
+              "potentialValue": 50,
+              "isMortgaged": true
+            },
+            {
+              "type": "movable",
+              "name": "car",
+              "potentialValue": 50,
+              "isMortgaged": true
+            }
+          ]
+        }
+      },
+      "RisksSchema": {
+        "type": "object",
+        "properties": {
+          "risks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RisksSchema_risks"
+            }
+          }
+        },
+        "example": {
+          "risks": [
+            {
+              "type": "Credit",
+              "score": 98,
+              "evalDate": "30-01-2025",
+              "validUntil": "30-01-2028",
+              "IsDeleted": false
+            },
+            {
+              "type": "Loan",
+              "score": 90,
+              "evalDate": "11-01-2025",
+              "validUntil": "30-01-2028",
+              "IsDeleted": true
+            }
+          ]
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer"
+          },
+          "errorDetail": {
+            "$ref": "#/components/schemas/ErrorResponse_errorDetail"
+          }
+        },
+        "example": {
+          "statusCode": 400,
+          "errorDetails": {
+            "xMessageId": "5678-fdbd-1d4c-c6d0",
+            "xUserId": "User1",
+            "cifId": 123456789,
+            "operation": "<<Opertion/Tag>>",
+            "type": "<<Invalid data>>",
+            "description": "<<Mobile number is not available>>"
+          }
+        }
+      },
+      "inline_response_200": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PartyCIFId"
+          },
+          {
+            "$ref": "#/components/schemas/CustomerInformationSchema"
+          },
+          {
+            "$ref": "#/components/schemas/AddressSchema"
+          },
+          {
+            "$ref": "#/components/schemas/ContactDetailsSchema"
+          },
+          {
+            "$ref": "#/components/schemas/FatcaSchema"
+          },
+          {
+            "$ref": "#/components/schemas/FlagMemosSchema"
+          },
+          {
+            "$ref": "#/components/schemas/GuardianSchema"
+          },
+          {
+            "$ref": "#/components/schemas/NomineeSchema"
+          },
+          {
+            "$ref": "#/components/schemas/AssetsSchema"
+          },
+          {
+            "$ref": "#/components/schemas/RisksSchema"
+          }
+        ]
+      },
+      "GenericPartySearchResponse_results": {
+        "type": "object",
+        "properties": {
+          "cifId": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "firstName": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "middleName": {
+            "maxLength": 25,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 30,
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "DOB in DD-MM-YYYY format"
+          },
+          "primaryMobile": {
+            "maxLength": 12,
+            "type": "integer",
+            "description": "Primary Mobile number"
+          },
+          "primaryEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "nationality": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "AuditTrailSearchResponse_results": {
+        "type": "object",
+        "properties": {
+          "trailId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "eventType": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "modifitedAttribute": {
+            "maxLength": 25,
+            "type": "string"
+          },
+          "modifitedDate": {
+            "maxLength": 30,
+            "type": "string"
+          },
+          "modifitedChannel": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "UpdateCIFAddressSchema_updateAddress": {
+        "required": [
+          "addressLine1",
+          "addressLine2",
+          "addressLine3",
+          "addressType",
+          "cityName",
+          "cityZipCode",
+          "district",
+          "isDefault",
+          "sameAsPermanentAddress",
+          "state",
+          "ward"
+        ],
+        "type": "object",
+        "properties": {
+          "addressType": {
+            "type": "string",
+            "description": "Type of Address of the Party"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Default Address of the Party"
+          },
+          "sameAsPermanentAddress": {
+            "type": "boolean"
+          },
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "addressLine3": {
+            "type": "string"
+          },
+          "ward": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "cityName": {
+            "type": "string"
+          },
+          "cityZipCode": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "example": "{\"addressType\":\"home\",\"isDefault\":true,\"sameAsPermanentAddress\":true,\"addressLine1\":\"George Street\",\"addressLine2\":\"1st cross\",\"addressLine3\":\"JJ Nagar\",\"ward\":10,\"district\":\"Madhapur\",\"cityName\":\"Mumbai\",\"cityZipCode\":110110,\"state\":\"Maharastra\"}"
+      },
+      "UpdateCIFMobileNumberSchema_updateMobile": {
+        "required": [
+          "countryId",
+          "isPrimary",
+          "mobileNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "mobileNumber": {
+            "type": "string",
+            "description": "New mobile number to be updated"
+          },
+          "countryId": {
+            "type": "string",
+            "description": "Country code of the mobile number"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "flag to specify is the primary mobile"
+          }
+        },
+        "example": "{\"mobileNumber\":908028822,\"countryId\":91,\"isPrimary\":true}"
+      },
+      "UpdateCIFEmailIdSchema_updateEmail": {
+        "required": [
+          "emailId",
+          "isPrimary"
+        ],
+        "type": "object",
+        "properties": {
+          "emailId": {
+            "type": "string",
+            "description": "New email id"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "Flag to specify if this primary mail id"
+          }
+        },
+        "example": "{\"emailId\":\"testing1@gmail.com\",\"isPrimary\":true}"
+      },
+      "UpdatePartyCIFStatusSchema_updateStatus": {
+        "required": [
+          "cifId",
+          "customerStatus"
+        ],
+        "type": "object",
+        "properties": {
+          "cifId": {
+            "type": "integer",
+            "description": "Customer Information File"
+          },
+          "customerStatus": {
+            "type": "boolean",
+            "description": "Flag to specify if this primary mail id"
+          }
+        },
+        "example": "{\"emailId\":\"testing1@gmail.com\",\"isPrimary\":true}"
+      },
+      "AddressSchema_address": {
+        "type": "object",
+        "properties": {
+          "addressType": {
+            "type": "string",
+            "description": "Type of Address of the Party"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Default Address of the Party"
+          },
+          "SameAsPermanentAddress": {
+            "type": "boolean"
+          },
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "addressLine3": {
+            "type": "string"
+          },
+          "ward": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "cityName": {
+            "type": "string"
+          },
+          "cityZipCode": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "countryId": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "ContactDetailsSchema_contactDetails": {
+        "type": "object",
+        "properties": {
+          "contactType": {
+            "type": "string",
+            "description": "Contact Channel Type"
+          },
+          "contactValue": {
+            "type": "string",
+            "description": "Value associated with contact channel (Number, username, handle)"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "Flag to identify if the record is primary contact channel"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "Flag to identify if the record is a verified contact channel"
+          },
+          "verifiedMode": {
+            "type": "string",
+            "description": "Mode of verification of the contact channel"
+          },
+          "lastVerifiedDate": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "Last Verified Date in DD-MM-YYYY format"
+          },
+          "isDnd": {
+            "type": "boolean",
+            "description": "Flag to identify if DND (Do not Disturb) is set by the party for the channel"
+          }
+        },
+        "example": null
+      },
+      "CustomerInformationSchema_customerInformation": {
+        "required": [
+          "dob",
+          "firstName",
+          "genderId",
+          "maritalStatus",
+          "nationality",
+          "nationalityType",
+          "primaryEmail",
+          "primaryMobile"
+        ],
+        "type": "object",
+        "properties": {
+          "salutationId": {
+            "type": "integer"
+          },
+          "firstName": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "middleName": {
+            "maxLength": 25,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 30,
+            "type": "string"
+          },
+          "mothersMaidenName": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "nickName": {
+            "maxLength": 25,
+            "type": "string"
+          },
+          "genderId": {
+            "type": "integer"
+          },
+          "dateOfBirth": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "DOB in DD-MM-YYYY format"
+          },
+          "placeOfBirth": {
+            "type": "string"
+          },
+          "countryOfBirth": {
+            "type": "string"
+          },
+          "primaryMobile": {
+            "maxLength": 12,
+            "type": "integer"
+          },
+          "primaryEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "maritalStatus": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string"
+          },
+          "nationalityType": {
+            "type": "string"
+          },
+          "educationType": {
+            "type": "string"
+          },
+          "profession": {
+            "type": "string"
+          },
+          "professionType": {
+            "type": "string"
+          },
+          "industryType": {
+            "type": "string"
+          },
+          "annualIncome": {
+            "type": "integer",
+            "format": "float"
+          },
+          "annualTurnover": {
+            "type": "integer",
+            "format": "float"
+          },
+          "taxId": {
+            "type": "string"
+          },
+          "dateOfInCorporation": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string"
+          },
+          "isStaff": {
+            "type": "boolean"
+          },
+          "staffCode": {
+            "type": "string"
+          },
+          "companyCode": {
+            "type": "string"
+          },
+          "groupCode": {
+            "type": "string"
+          },
+          "portfolioCode": {
+            "type": "string"
+          },
+          "custRiskCategory": {
+            "type": "string"
+          },
+          "lastRiskEvalDate": {
+            "type": "string"
+          },
+          "relationType": {
+            "type": "string"
+          },
+          "partyStatus": {
+            "type": "string"
+          },
+          "referralCode": {
+            "type": "string"
+          },
+          "promoCode": {
+            "type": "string"
+          },
+          "partySegment": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "FatcaSchema_fatca": {
+        "type": "object",
+        "properties": {
+          "placeOfIncorp": {
+            "type": "string",
+            "description": "Place of Incorporation"
+          },
+          "countryOfIncorp": {
+            "type": "string",
+            "description": "Country of Incorporation"
+          },
+          "countryOfResidence": {
+            "type": "string",
+            "description": "Country of residence"
+          },
+          "inCorpNo": {
+            "type": "string"
+          },
+          "boardReslNo": {
+            "type": "string"
+          },
+          "reportBLNo": {
+            "type": "string"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "Tax Identification Number of the Party"
+          }
+        },
+        "example": null
+      },
+      "FlagMemosSchema_flagMemos": {
+        "type": "object",
+        "properties": {
+          "amlCheckStatus": {
+            "type": "boolean",
+            "description": "Flag to identify the AML Check completed for the Party"
+          },
+          "isDeceased": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party is deceased"
+          },
+          "isSolvency": {
+            "type": "boolean",
+            "description": "Flag to identify the Party as insolvent"
+          },
+          "isNpa": {
+            "type": "boolean",
+            "description": "Flag to identify if Party is a NPA(Non Performing Asset)"
+          },
+          "isWillFullDefaulter": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party is a Willful defaulter"
+          },
+          "willFullDefaulterDate": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "Will Full Defaulter Date in DD-MM-YYYY format"
+          },
+          "isLoanOverDue": {
+            "type": "boolean",
+            "description": "Flag to Identify if any Loan is overdue for Party"
+          },
+          "isSuitFiled": {
+            "type": "boolean"
+          },
+          "isPoliticallyExposed": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party is PEP (Politically exposed)"
+          },
+          "isFatcaApplicable": {
+            "type": "boolean",
+            "description": "Flag to identify if FATCA is applicable for the Party"
+          },
+          "isEmailStatementReg": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party has registered to get Statements on Email"
+          },
+          "isUnderWatchList": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party is added to Watchlist"
+          }
+        },
+        "example": null
+      },
+      "GuardianSchema_guardian": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "addressLine3": {
+            "type": "string"
+          },
+          "ward": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "cityName": {
+            "type": "string"
+          },
+          "cityZipCode": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "NomineeSchema_nominee": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "secondName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "relation": {
+            "type": "string"
+          },
+          "nationalId": {
+            "type": "string"
+          },
+          "nationalPercentage": {
+            "type": "string"
+          }
+        },
+        "example": null
+      },
+      "AssetsSchema_assets": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Asset or Collaterals type"
+          },
+          "name": {
+            "type": "string",
+            "description": "Asset Name"
+          },
+          "potentialValue": {
+            "type": "string",
+            "description": "Value of the Asset"
+          },
+          "isMortgaged": {
+            "type": "boolean",
+            "description": "Flag to identify if the Asset is mortgaged"
+          }
+        },
+        "example": null
+      },
+      "RisksSchema_risks": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of Risk"
+          },
+          "score": {
+            "type": "string",
+            "description": "Score mapped again the risk"
+          },
+          "evalDate": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "Risk Evaluated Date in DD-MM-YYYY format"
+          },
+          "validUntil": {
+            "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+            "type": "string",
+            "description": "Risk score valid Until Date in DD-MM-YYYY format"
+          },
+          "IsDeleted": {
+            "type": "boolean",
+            "description": "Flag to identify if the Party is Soft Deleted"
+          }
+        },
+        "example": null
+      },
+      "ErrorResponse_errorDetail": {
+        "required": [
+          "description",
+          "errorType",
+          "operation",
+          "xMessageId",
+          "xUserId"
+        ],
+        "type": "object",
+        "properties": {
+          "xMessageId": {
+            "type": "string"
+          },
+          "xUserId": {
+            "type": "string"
+          },
+          "cifId": {
+            "type": "integer"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "example": null
+      }
+    },
+    "parameters": {
+      "xSessionId": {
+        "name": "xSessionId",
+        "in": "header",
+        "description": "A unique identifier for the session",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "xMessageId": {
+        "name": "xMessageId",
+        "in": "header",
+        "description": "A unique identifier for this message exchange",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "xUserId": {
+        "name": "xUserId",
+        "in": "header",
+        "description": "The identifier for logged in user that is sending requests via channels",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "xChannelId": {
+        "name": "xChannelId",
+        "in": "header",
+        "description": "Short identifier for consuming channel or system",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "The maximum number of items that may be returned for a single request. i.e pagesize",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "description": "The starting point within the collection of resource results.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "sortingOrder": {
+        "name": "sortingOrder",
+        "in": "query",
+        "description": "The starting point within the collection of resource results.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      },
+      "cifId": {
+        "name": "cifId",
+        "in": "header",
+        "description": "Provide CIF number",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "number"
+        }
+      },
+      "primaryMobile": {
+        "name": "mobileNumber",
+        "in": "header",
+        "description": "Provide mobile number",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "firstName": {
+        "name": "firstName",
+        "in": "header",
+        "description": "Provide mobile number",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "maxLength": 40,
+          "type": "string"
+        }
+      },
+      "lastName": {
+        "name": "lastName",
+        "in": "header",
+        "description": "Provide mobile number",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "primaryEmail": {
+        "name": "emailId",
+        "in": "header",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "dateOfBirth": {
+        "name": "dateOfBirth",
+        "in": "header",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "pattern": "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$",
+          "type": "string",
+          "description": "DOB in DD-MM-YYYY format"
+        }
+      },
+      "trailId": {
+        "name": "trailId",
+        "in": "header",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "description": "trail Id of the CIF events"
+        }
+      }
+    },
+    "requestBodies": {
+      "Dedupe": {
+        "description": "Pass mobile number to check",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DedupeRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "FetchCIFwithID": {
+        "description": "Fetch CIF with ID",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FetchCIFwithIDRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "CreatePartyCIF": {
+        "description": "Create new CIF",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/CustomerInformationSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AddressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ContactDetailsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/FatcaSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/FlagMemosSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GuardianSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/NomineeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AssetsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/RisksSchema"
+                }
+              ]
+            }
+          }
+        },
+        "required": true
+      },
+      "GenericPartySearchCIF": {
+        "description": "GenericPartySearchCIF request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GenericPartySearchRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdatePartyCIF": {
+        "description": "Update existing CIF",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartyCIFId"
+                },
+                {
+                  "$ref": "#/components/schemas/CustomerInformationSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AddressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ContactDetailsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/FatcaSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/FlagMemosSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GuardianSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/NomineeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AssetsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/RisksSchema"
+                }
+              ]
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdatePartyCIFContacts": {
+        "description": "Update existing CIF Address and Contacts",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartyCIFId"
+                },
+                {
+                  "$ref": "#/components/schemas/UpdateCIFAddressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/UpdateCIFMobileNumberSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/UpdateCIFEmailIdSchema"
+                }
+              ]
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdatePartyCIFStatus": {
+        "description": "Update existing CIF Status",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PartyCIFId"
+                },
+                {
+                  "$ref": "#/components/schemas/UpdatePartyCIFStatusSchema"
+                }
+              ]
+            }
+          }
+        },
+        "required": true
+      },
+      "GenericPartySearch": {
+        "description": "Generic Search request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GenericPartySearchRequest"
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  },
+  "x-aws-api-id": "8w6j8z2903"
+}

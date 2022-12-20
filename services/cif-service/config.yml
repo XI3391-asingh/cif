@@ -1,0 +1,128 @@
+logging:
+  level: INFO
+  loggers:
+    com.cif: DEBUG
+  appenders:
+    - type: console
+      threshold: ALL
+      queueSize: 512
+      discardingThreshold: 0
+      timeZone: UTC
+      target: stdout
+      logFormat: "[%X{X-Request-ID}] %-5p [%d{ISO8601,UTC}] %c: %m%n%rEx"
+server:
+  applicationConnectors:
+    - type: http
+      port: 11699
+  adminConnectors:
+    - type: http
+      port: 11700
+
+database:
+  driverClass: org.postgresql.Driver
+  url: ${POSTGRES_URL:-jdbc:postgresql://localhost:5432/cifservicedb}
+  user: ${POSTGRES_USER:-  }
+  password: ${POSTGRES_PASSWORD:- }
+
+elasticsearch:
+  host: ${ELASTIC_HOST:- http://localhost}
+  port: ${ELASTIC_PORT:- 9200}
+  party_index: ${PARTY_INDEX:- party_v1}
+  activity_posting_index: ${ACTIVITY_POSTING_INDEX:- activity_posting}
+  admin_cif_index: ${ACTIVITY_CONFIG_INDEX:- admin_config}
+
+
+eventPosting:
+  allow: ${EVENT_POSTING_ALLOW:- true}
+
+consumer:
+  type: basic
+  name: ${CONSUMER_NAME:- cif_consumer}
+  topics: ${CONSUMER_TOPICS:-
+    - cif_topic-ack
+    }
+  bootstrapServers: ${CONSUMER_BOOTSTRAP_SERVER:- localhost:9092}
+  consumerGroupId: ${CONSUMER_GROUP_ID:- cif_consumer_group}
+  keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  autoOffsetReset: earliest
+  autoCommitEnabled: false
+# security:
+#   enabled: ${SECURITY_PROTOCOL:- false}
+#   securityProtocol: ${SECURITY_PROTOCOL:- }
+#   sslProtocol: ${SSL_PROTOCOL:- }
+#   saslMechanism: ${SASL_MECHANISM:- }
+#   saslJaas: ${SASL_JAAS:- }
+
+
+producer:
+  type: basic
+  name: ${PRODUCER_NAME:- cif_producer}
+  topic: ${PRODUCER_TOPICS:- cif_topic }
+  bootstrapServers: ${BOOTSTRAP_SERVER:- localhost:9092}
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.cif.cifservice.core.party.util.DataSerializer
+  acks: ${ACKS:- all}
+  retries: ${RETRIES:- 5}
+  maxInFlightRequestsPerConnection: 1
+# security:
+#   enabled: ${SECURITY_PROTOCOL:- false}
+#   securityProtocol: ${SECURITY_PROTOCOL:- }
+#   sslProtocol: ${SSL_PROTOCOL:- }
+#   saslMechanism: ${SASL_MECHANISM:- }
+#   saslJaas: ${SASL_JAAS:- }
+
+swagger:
+  resourcePackage: com.cif.cifservice.resources
+
+universalSearchFields:
+  text:
+    - party.firstName
+    - party.middleName
+    - party.lastName
+    - party.fullName
+    - party.nickName
+    - party.mothersMaidenName
+    - party.primaryEmail
+    - party.amlRisk
+    - occupationDetail.companyTypeCode
+    - party.staffCode
+    - party.isDeleted
+    - party.amlCheckStatus
+    - partyFlag.isNpa
+    - address.ward
+    - address.city
+    - contactDetails.contactValue
+  number:
+    - party.primaryMobileNumber
+    - party.dateOfBirth
+    - occupationDetail.companyTypeCode
+    - party.staffCode
+    - address.cityZipCode
+    - contactDetails.contactValue
+  email:
+    - party.primaryEmail
+  date:
+    - party.dateOfBirth
+  specialChar:
+    - party.dateOfBirth
+
+encryption:
+  secretKey: ${ENCRYPTION_KEY:- test@1234567#cif}
+  fields:
+    - party.firstName
+    - party.lastName
+    - party.primaryEmail
+    - party.middleName
+    - party.fullName
+    - party.primaryMobileNumber
+    - party.nationalId
+    - occupationDetail.taxId
+    - address.addressLine1
+    - address.addressLine2
+    - address.addressLine3
+    - contactDetails.contactValue
+  encryptionFlag: ${ENCRYPTION_FLAG:- TRUE}
+
+bulkImportConfig:
+  tempPath: ${TEMP_PATH:- //tmp//MasterData.xlsx}

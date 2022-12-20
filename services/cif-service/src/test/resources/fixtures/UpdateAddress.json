@@ -1,0 +1,14 @@
+{
+  "addressTypeCode": "HANOI 11618",
+  "isDefault": true,
+  "addressLine1": "Ms Bui Luu Thuy Ma",
+  "addressLine2": "No 1, Alley 15, Lane No 333, Bach Mai Str",
+  "addressLine3": "Bach Mai, Hai Ba Trung ",
+  "wardCode": "W1",
+  "districtCode": "D11",
+  "cityCode": "1",
+  "cityZipCode": 11618,
+  "countryCode": "84",
+  "documentId": "11",
+  "partyAddressId": 1
+}

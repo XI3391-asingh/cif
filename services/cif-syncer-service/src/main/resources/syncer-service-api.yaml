@@ -1,0 +1,419 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Open API Specification for Syncer
+paths:
+  /syncer/config:
+    post:
+      tags:
+        - Config
+      summary: Create Config Detail's
+      operationId: createConfigData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConfigRequest'
+      responses:
+        '201':
+          description: Change Config Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ConfigResponseCmd'
+    put:
+      tags:
+        - Config
+      summary: Update Config Detail's
+      operationId: updateConfigData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConfigRequest'
+      responses:
+        '201':
+          description: Change Config Updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ConfigResponseCmd'
+  /syncer/config/fetch:
+    post:
+      tags:
+        - Config
+      summary: Fetch Config Detail's
+      operationId: getConfigData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchRequest'
+      responses:
+        '201':
+          description: Config Fetch
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ConfigResponseCmd'
+  /syncer/adapter:
+    post:
+      tags:
+        - Adapter
+      summary: Create Adapter Detail's
+      operationId: createAdapterData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAdapterRequest'
+      responses:
+        '201':
+          description: Adapter Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AdapterResponseCmd'
+    put:
+      tags:
+        - Adapter
+      summary: Update Adapter Detail's
+      operationId: updateAdapterData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAdapterRequest'
+      responses:
+        '201':
+          description: Adapter Updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AdapterResponseCmd'
+  /syncer/adapter/fetch:
+    post:
+      tags:
+        - Adapter
+      summary: Fetch Adapter Detail's
+      operationId: getAdapterData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchAdapterRequest'
+      responses:
+        '201':
+          description: Adapter Fetch
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AdapterResponseCmd'
+  /syncer/system/:
+    get:
+      tags:
+        - System
+      summary: Fetch System Detail's
+      operationId: getSystemDetails
+      responses:
+        '201':
+          description: System Data Fetch
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/SystemResponseListCmd'
+    put:
+      tags:
+        - System
+      summary: Update System Detail's
+      operationId: updateSystemDetail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemRequestCmd'
+      responses:
+        '201':
+          description: System Data Update
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponseApi"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/SystemRequestCmd'
+
+components:
+  schemas:
+    ConfigRequestCmd:
+      type: object
+      properties:
+        configId:
+          type: integer
+          format: int32
+          default: 0
+        systemId:
+          type: integer
+          format: int32
+          default: 0
+        systemCode:
+          type: string
+        systemType:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        configFields:
+          type: array
+          items:
+            type: string
+            example: value1,value2
+        apiDetails:
+          $ref: '#/components/schemas/ApiDetails'
+    ConfigResponseCmd:
+      type: object
+      properties:
+        configId:
+          type: integer
+          format: int32
+          default: 0
+        systemId:
+          type: integer
+          format: int32
+          default: 0
+        systemCode:
+          type: string
+        systemType:
+          type: string
+        isActive:
+          type: boolean
+        configFields:
+          type: array
+          items:
+            type: string
+            example: value1,value2
+        apiDetails:
+          $ref: '#/components/schemas/ApiDetails'
+    ApiDetails:
+      type: object
+      required:
+        - baseUrl
+        - create
+        - update
+      properties:
+        baseUrl:
+          type: string
+        create:
+          $ref: '#/components/schemas/ApiAttribute'
+        update:
+          $ref: '#/components/schemas/ApiAttribute'
+    ApiAttribute:
+      type: object
+      required:
+        - endPoint
+        - authToken
+      properties:
+        endPoint:
+          type: string
+        authToken:
+          type: string
+    AdapterRequestCmd:
+      type: object
+      properties:
+        adapterConfigId:
+          type: integer
+          format: int32
+          example: 1
+        sourceSystemId:
+          type: integer
+          format: int32
+          example: 1
+          minimum: 1
+        integrationSystemId:
+          type: integer
+          format: int32
+          example: 1
+          minimum: 1
+        sourceSystemCode:
+          type: string
+          example: "SYSTEM1"
+        integrationSystemCode:
+          type: string
+          example: "SYSTEM1"
+        isCreate:
+          type: boolean
+        isUpdate:
+          type: boolean
+    AdapterResponseCmd:
+      type: object
+      properties:
+        adapterConfigId:
+          type: integer
+          format: int32
+        sourceSystemId:
+          type: integer
+          format: int32
+        integrationSystemId:
+          type: integer
+          format: int32
+        sourceSystemCode:
+          type: string
+        integrationSystemCode:
+          type: string
+        isCreate:
+          type: boolean
+        isUpdate:
+          type: boolean
+    SystemResponseListCmd:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemRequestCmd'
+    SystemRequestCmd:
+      type: object
+      properties:
+        systemId:
+          type: integer
+          format: int32
+        systemCode:
+          type: string
+        systemType:
+          type: string
+        description:
+          type: string
+    ResponseApi:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestID:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    CreateConfigRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ConfigRequestCmd'
+        - type: object
+      required:
+        - systemCode
+    UpdateConfigRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ConfigRequestCmd'
+        - type: object
+      required:
+        - systemCode
+        - systemId
+    FetchRequest:
+      type: object
+      properties:
+        systemCode:
+          type: string
+          example: TEST
+        configId:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+    FetchAdapterRequest:
+      type: object
+      properties:
+        adapterId:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+    CreateAdapterRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AdapterRequestCmd'
+        - type: object
+      required:
+        - sourceSystemCode
+        - integrationSystemCode
+        - isCreate
+        - isUpdate
+    UpdateAdapterRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/AdapterRequestCmd'
+        - type: object
+      required:
+        - adapterConfigId
+    ErrorResponseApi:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            requestID:
+              type: string
+        status:
+          type: object
+          properties:
+            code:
+              type: string
+            errors:
+              type: array
+              items:
+                type: object
+
+    SuccessResponseApi:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ResponseApi'
+        - type: object
+          properties:
+            data:
+              type: object
