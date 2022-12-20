@@ -25,11 +25,8 @@ jobs:
       uses: gradle/gradle-build-action@v2
 
     - name: Grant execute permission for gradlew
+      working-directory: ./services/cif-service
       run: chmod +x gradlew
-    
-    defaults:
-      run: |
-          working-directory: services/cif-service
     
     - name: Gradle build
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
