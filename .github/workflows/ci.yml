@@ -1,10 +1,10 @@
-name: Java CI with Gradle
+name: Build and Deploy
 
 on:
   push:
-    branches: [ "main", "actions" ]
+    branches: [ "main"]
   pull_request:
-    branches: [ "main", "actions" ]    
+    branches: [ "main", "pipeline" ]    
 
 permissions:
   contents: read
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: services/cif-service #change service name before build
+        working-directory: services/nominee-service #change service name before build
 
     steps:
     - uses: actions/checkout@v3
@@ -32,3 +32,48 @@ jobs:
     
     - name: Gradle build
       run: ./gradlew build
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: my-project
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name labs --region ap-south-1
+
+    - uses: azure/setup-helm@v3
+      with:
+        version: 'v3.8.2' # default is latest (stable) test
+        token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+      id: install
+
+    - name: Deploy Helm
+      uses: bitovi/github-actions-deploy-eks-helm@v1.1.0
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+        cluster-name: labs
+        cluster-role-arn: ${{ secrets.AWS_ROLE_ARN }}
+        config-files:  services/nominee-service/k8s-config/dev/values.yaml
+        chart-path: _helm_charts/xebia/helm-xebia-service-chart
+        namespace: dev-test
+        name: nominee-service 
+        version: 1.0.10
+        atomic: true
+
