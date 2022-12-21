@@ -1,0 +1,11 @@
+apiVersion: v2
+name: app
+description: A Helm chart for deploying microservices at Xebia
+
+type: application
+version: 1.0.10
+appVersion: 1.0.0
+
+maintainers:
+  - name: XI3391-asingh
+    email: abhishek.singh5@xebia.com
