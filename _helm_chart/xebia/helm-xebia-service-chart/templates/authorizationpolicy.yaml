@@ -1,0 +1,19 @@
+{{- if and .Values.istio.enabled .Values.istio.authorizationPolicy.enabled }}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "app.fullname" . }}
+  namespace: {{ include "app.namespace" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        namespaces: 
+        {{-  include "istio.authorizationPolicyNs" . | nindent 8}}
+{{- end }}

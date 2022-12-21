@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}
+  namespace: {{ include "app.namespace" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- with .Values.deployment.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}    
+      {{- with .Values.deployment.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
+      {{- if .Values.deployment.initContainers }}
+      initContainers:
+      {{- range $initContainers := .Values.deployment.initContainers }}
+        - name: {{ $initContainers.name }}
+          image: "{{ $initContainers.image.repository}}:{{$initContainers.image.tag}}"
+          {{- if $initContainers.extraEnvs }}
+          env:
+{{ toYaml $initContainers.extraEnvs | indent 12 }}
+          {{- end }}
+          {{- if $initContainers.volumeMounts }}
+          volumeMounts:
+{{ toYaml $initContainers.volumeMounts | indent 10}}
+          {{- end }}
+          {{- if $initContainers.command }}    
+          command:
+{{ toYaml $initContainers.command | indent 10}}
+          {{- end }}        
+          {{- if $initContainers.resources }}           
+          resources:
+           {{- toYaml $initContainers.resources | nindent 12 }}
+           {{- end }}
+      {{- end }}
+      {{- end }} 
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.deployment.securityContext | nindent 12 }}
+          image: "{{- include "app.image" .}}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+          {{- range $key, $value := .Values.deployment.containerPort }}
+          - name: {{ $key }}
+            containerPort: {{ $value }}
+            protocol: TCP
+          {{- end }}
+          {{- if .Values.deployment.extraEnvs }}
+          env:
+{{ toYaml .Values.deployment.extraEnvs | indent 12 }}
+          {{- end }}
+          {{- if .Values.deployment.volumeMounts }}
+          volumeMounts:
+{{ toYaml .Values.deployment.volumeMounts | indent 12}}
+          {{- end }}
+          {{- if .Values.deployment.startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.deployment.startupProbe.path }}
+              port: {{ .Values.deployment.startupProbe.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.deployment.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+          {{- end}}
+          {{- if .Values.deployment.readinessProbe }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.deployment.readinessProbe.path }}
+              port: {{ .Values.deployment.readinessProbe.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+          {{- end}}
+          {{- if .Values.deployment.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.deployment.livenessProbe.path }}
+              port: {{ .Values.deployment.livenessProbe.port }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          {{- end}}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- if .Values.deployment.envFrom }}  
+          envFrom:
+            {{- toYaml .Values.deployment.envFrom | nindent 12 }}
+          {{- end}}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.deployment.volumes }}
+      volumes:
+{{ toYaml .Values.deployment.volumes | indent 8}}
+      {{- end }}
