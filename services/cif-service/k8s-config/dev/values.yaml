@@ -44,7 +44,7 @@ deployment:
     registry: "474532148129.dkr.ecr.ap-south-1.amazonaws.com"
     repository: cif-servicemy-project
     pullPolicy: IfNotPresent
-    tag:$IMAGE_TAG
+    tag: $IMAGE_TAG
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '11700'
