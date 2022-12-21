@@ -50,6 +50,6 @@ jobs:
 
     - uses: azure/setup-helm@v3
       with:
-        version: [v3.8.2] # default is latest (stable)
+        version: 'v3.8.2' # default is latest (stable)
         token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
       id: install
