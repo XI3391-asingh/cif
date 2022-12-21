@@ -43,6 +43,11 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Create an AWS ECR repository
+      uses: openedx-actions/create-aws-ecr-repository
+      with:
+        aws-ecr-repository: my_new_repo
 
     - name: Build, tag, and push image to Amazon ECR
       env:
