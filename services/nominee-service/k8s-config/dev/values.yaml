@@ -1,0 +1,142 @@
+project: x-finx
+fullnameOverride: 'nominee-service'
+environment: 'dev'
+namespace: 'dev'
+deployment:
+  component: api
+  containerPort:
+    http: 12525
+    metrics: 12526
+  replicaCount: 1
+#   initContainers:
+#   - name: init-liquibase
+#     image:
+#       tag: <+artifact.tag>
+#       repository: "474532148129.dkr.ecr.ap-south-1.amazonaws.com/nominee-service"
+#     extraEnvs:
+#     - name: POSTGRES_USER
+#       valueFrom:
+#         secretKeyRef:
+#           name: dev-cif-service-db-credentials
+#           key: username
+#     - name: POSTGRES_PASSWORD
+#       valueFrom:
+#         secretKeyRef:
+#           name: dev-cif-service-db-credentials
+#           key: password
+#     - name: POSTGRES_URL
+#       value: jdbc:postgresql://postgresql.postgresql.svc.cluster.local:5432/nomineeservicedb
+#     resources:
+#       limits:
+#         cpu: 100m
+#         memory: 600Mi
+#       requests:
+#         cpu: 50m
+#         memory: 300Mi
+#     command:
+#     - "java"
+#     - "-jar"
+#     - "/app/app.jar"
+#     - db
+#     - migrate
+#     - config.yml
+  image:
+    registry: "474532148129.dkr.ecr.ap-south-1.amazonaws.com"
+    repository: nominee-service
+    pullPolicy: IfNotPresent
+    tag: <+artifact.tag>
+  podAnnotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '12526'
+    prometheus.io/path: '/metrics'
+  extraEnvs:
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: dev-cif-service-db-credentials
+        key: username
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: dev-cif-service-db-credentials
+        key: password
+  - name: POSTGRES_URL
+    value: jdbc:postgresql://postgresql.postgresql.svc.cluster.local:5432/nomineeservicedb
+  livenessProbe:
+    path: /healthcheck
+    port: 12526
+    failureThreshold: 10
+    initialDelaySeconds: 20
+    timeoutSeconds: 10
+  readinessProbe:
+    path: /healthcheck
+    port: 12526
+    failureThreshold: 10
+    initialDelaySeconds: 18
+    timeoutSeconds: 10
+  resources:
+    limits:
+      cpu: 100m
+      memory: 600Mi
+    requests:
+      cpu: 50m
+      memory: 300Mi
+  volumeMounts:
+  - mountPath: /etc/secrets/cif-service-db-secret
+    name: cif-service-db-secret
+    readOnly: true
+  volumes:
+  - name: cif-service-db-secret
+    secret:
+      secretName: dev-cif-service-db-credentials
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+  - name: http
+    port: 12525
+    targetPort: 12525
+istio:
+  enabled: false
+  destinationRule:
+    enabled: false
+  virtualService:
+    enabled: true
+    timeout: 1m
+    destinationport: 12525
+    host: '*'
+    gateway: istio-ingressgateway
+    uriPrefix:
+    - /nominee/
+  # authorization policy to only allow access within the namespace
+  authorizationPolicy:
+    enabled: false
+    allowedNaemspaces: []
+    # allowedNaemspaces: [ns1, ns2, ns3]
+secretProviderClass:
+  enabled: false
+  provider: aws
+  parameters:
+    objects:
+      - objectName: arn:aws:secretsmanager:ap-south-1:474532148129:secret:dev-cif-service-db-credentials-hXlCjO
+        objectType: secretsmanager
+        jmesPath:
+          - path: "username"
+            objectAlias: "SecretUsername"
+          - path: "password"
+            objectAlias: "SecretPassword"
+  secretObjects:
+  - secretName: arn:aws:secretsmanager:ap-south-1:474532148129:secret:dev-cif-service-db-credentials-hXlCjO
+    type: Opaque
+    data:
+    - key: username
+      objectName: "SecretUsername"
+    - key: password
+      objectName: "SecretPassword"
+serviceAccount:
+  annotations:
+     eks.amazonaws.com/role-arn: arn:aws:iam::474532148129:role/TerraformAdmin
+  name: 'nominee-service'
