@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: services/nominee-service
+        working-directory: services/nominee-service #change service name before build
 
     steps:
     - uses: actions/checkout@v3
