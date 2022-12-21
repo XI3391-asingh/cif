@@ -40,11 +40,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-
         
-    - name: Create an AWS ECR repository
-      uses: openedx-actions/create-aws-ecr-repository
-      with:
-        aws-ecr-repository: my_new_repo
-
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
