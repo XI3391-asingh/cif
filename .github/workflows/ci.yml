@@ -72,7 +72,7 @@ jobs:
         cluster-role-arn: ${{ secrets.AWS_ROLE_ARN }}
         config-files:  services/nominee-service/k8s-config/dev/values.yaml
         chart-path: _helm_charts/xebia/helm-xebia-service-chart
-        namespace: dev-test
+        namespace: dev
         name: nominee-service 
         version: 1.0.10
         atomic: true
