@@ -70,7 +70,7 @@ jobs:
         aws-region: ap-south-1
         cluster-name: labs
         cluster-role-arn: ${{ secrets.AWS_ROLE_ARN }}
-        config-files: fluent-bit/prod/values.yaml
+        config-files: k8s-config/dev/values.yaml
         chart-path: _helm_charts/xebia/helm-xebia-service-chart
         namespace: dev-test
         name: cif-service 
