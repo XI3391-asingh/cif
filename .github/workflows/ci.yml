@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Build and Deploy
 
 on:
   push:
@@ -61,4 +61,19 @@ jobs:
         version: 'v3.8.2' # default is latest (stable)
         token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
       id: install
+
+    - name: Deploy Helm
+      uses: bitovi/github-actions-deploy-eks-helm@v1.1.0
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+        cluster-name: labs
+        cluster-role-arn: ${{ secrets.AWS_ROLE_ARN }}
+        config-files: fluent-bit/prod/values.yaml
+        chart-path: _helm_charts/xebia/helm-xebia-service-chart
+        namespace: dev-test
+        name: cif-service 
+        version: 1.0.10
+        atomic: true
 

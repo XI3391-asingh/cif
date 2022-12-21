@@ -1,0 +1,247 @@
+project: project-name
+fullnameOverride: ""
+environment: "dev" # dev, uat or prod
+namespace: "test"
+deployment:
+  # initContainers:
+  # - name: init-cacerts
+  #   image:
+  #     tag: "v7.0.9"
+  #     repository: "quay/busybox:1.0"
+  #   volumeMounts:
+  #   - mountPath: /etc/ssl/certs
+  #     name: cacerts
+  #   command:
+  #   - bash
+  #   - -c
+  #   - |
+  #     cp /etc/ssl/caert /security
+  #   extraEnvs:
+  #   - name: POSTGRES_USER
+  #     value: admin
+  #   - name: POSTGRES_PASSWORD
+  #     value: admin
+  #   - name: POSTGRES_URL
+  #     value: jdbc:postgresql://customer-service-db-postgresql.postgres.svc.cluster.local:5432/customerservicedb
+  #   resources:
+  #    limits:
+  #     cpu: 100m
+  #     memory: 128Mi
+  #    requests:
+  #     cpu: 50m
+  #     memory: 100Mi
+  component: api # The component within the architecture (database, server, api, library)
+  containerPort:
+    http: 8080
+    # grpc: 50051
+    # if serviceMonitor is enabled then expose prometheus container port
+    # prometheus: 9779
+  imagePullSecrets: []
+  replicaCount: 2
+  image:
+    registry: ""
+    repository: nginx
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  podAnnotations: {}
+  podSecurityContext:
+    {}
+    # fsGroup:
+  envFrom: []
+  # - configMapRef:
+  #     name: special-config
+  # - secretRef:
+  #     name: mysecret
+
+  securityContext:
+    privileged: false
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+
+  affinity: {}
+  # podAntiAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #   - labelSelector:
+  #       matchExpressions:
+  #       - key: app
+  #         operator: In
+  #         values:
+  #         - pingpong
+  #     topologyKey: kubernetes.io/hostname
+  startupProbe:
+    {}
+    # httpGet:
+    #   path: /actuator/health
+    #   port: 8080
+    #   scheme: HTTP
+    # initialDelaySeconds: 18
+    # periodSeconds: 12
+    # timeoutSeconds: 10
+    # failureThreshold: 10
+  readinessProbe:
+    {}
+    # httpGet:
+    #   path: /actuator/health
+    #   port: 8080
+    #   scheme: HTTP
+    # initialDelaySeconds: 18
+    # periodSeconds: 12
+    # timeoutSeconds: 10
+    # successThreshold: 10
+    # failureThreshold: 10
+  livenessProbe:
+    {}
+    # httpGet:
+    #   path: /actuator/health
+    #   port: 8080
+    #   scheme: HTTP
+    # initialDelaySeconds: 15
+    # periodSeconds: 12
+    # timeoutSeconds: 10
+    # successThreshold: 10
+    # failureThreshold: 30
+
+  extraEnvs: []
+
+  volumeMounts:
+    []
+    # - mountPath: /etc/secrets/service-secret
+    #   name: service-secret-mount
+    #   readOnly: true
+    # - mountPath: /etc/secrets/service-client-secret
+    #   name: service-client-secret-mount
+    #   readOnly: true
+  volumes:
+    []
+    # - name: service-secret-mount
+    #   secret:
+    #     secretName: digitaldealer-service-secret
+    # - name: service-client-secret-mount
+    #   secret:
+    #     secretName: service-client-secret
+
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  # - name: grpc
+  #   port: 50051
+  #   targetPort: 50051
+
+istio:
+  enabled: true
+  destinationRule:
+    enabled: false
+  virtualService:
+    enabled: true
+    timeout: 1m
+    host: "*"
+    gateway: mesh
+    uriPrefix:
+    - /
+    - /home
+    # rewriteuri: /
+  gateway:
+    enabled: false
+    portName: http
+    portNumber: 80
+    protocol: HTTP
+    ingressHost: "*"
+
+  # authorization policy to only allow access within the namespace
+  authorizationPolicy:
+    enabled: false
+    allowedNaemspaces: []
+    # allowedNaemspaces: [ns1, ns2, ns3]
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-3:***:certificate/fcaa9fd2-1b55-48d7-92f2-e829f7bafafd"
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    # alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+  rules:
+    - http:
+        paths:
+          # - path: /*
+          #   backend:
+          #     service:
+          #       name: ssl-redirect
+          #       port:
+          #         number: use-annotation
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: istio-ingressgateway
+                port:
+                  number: 80
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+serviceAccount:
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "test"
+
+config: {}
+
+# creates a servicemonitor on prometheus
+serviceMonitor:
+  enabled: false
+  path: /actuator/prometheus
+  port: http
+  additionalLabels: {}
+
+secretProviderClass:
+  enabled: false
+  provider: aws
+  parameters:
+    objects: |
+      - objectName: "nginx-secret-db"
+        objectType: "secretsmanager"
+#        jmesPath:
+#            - path: "username"
+#              objectAlias: "SecretUsername"
+#            - path: "password"
+#              objectAlias: "SecretPassword"
+#  secretObjects:
+#    - data:
+#        - key: username
+#          objectName: "SecretUsername"
+#        - key: password
+#          objectName: "SecretPassword"
+#      secretName: nginx-secret-db
+#      type: Opaque
+
+# test pod will curl the cluster service dns
+test:
+  enabled: false
+  testPath: /health
